@@ -1,0 +1,40 @@
+<form [formGroup]="happeningForm" (ngSubmit)="submit()" class="container mt-4">
+  <div class="mb-3">
+    @if (happeningForm.get('name')?.touched && happeningForm.get('name')?.invalid) {
+    <div class="text-danger">Name is required.</div>
+    }
+    <label>Name:</label>
+    <input type="text"
+           formControlName="name"
+           class="form-control"
+           [class.is-invalid]="happeningForm.get('name')?.touched && happeningForm.get('name')?.invalid" />
+
+  </div>
+
+  <div class="mb-3">
+    <label>
+      Start date:
+      <input type="date" formControlName="startDate" />
+    </label>
+  </div>
+
+  <div class="mb-3">
+    <label>
+      End date:
+      <input type="date" formControlName="endDate" />
+    </label>
+  </div>
+
+  <div formArrayName="happeningArtists" class="mb-3">
+    <h5>Artists</h5>
+    @for (artistCtrl of happeningArtists.controls; let i = $index; track i) {
+    <div [formGroupName]="i">
+      <app-artist-finder (artistSelected)="onArtistSelected($event, i)"></app-artist-finder>
+      <button type="button" (click)="removeArtist(i)" class="btn btn-danger">Remove Artist</button>
+    </div>
+    }
+    <button type="button" (click)="addArtist()" class="btn btn-secondary">Add Artist</button>
+  </div>
+
+  <button type="submit">Create happening</button>
+</form>

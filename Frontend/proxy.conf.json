@@ -1,0 +1,12 @@
+{
+  "/artist": {
+    "target": "http://localhost:5555",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/happening": {
+    "target": "http://localhost:5556",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

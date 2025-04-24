@@ -1,0 +1,21 @@
+<p>artist-details works!</p>
+
+@if(id >= 1){
+<p>here?</p>
+<p>s {{id}}</p>}
+
+@if ((artist$ | async); as aartist) {
+<p>aartist defined?</p>
+  @if (aartist.spotifyId === undefined) {
+<p>no artist found</p>
+  } @else {
+<p>{{aartist.spotifyId}}</p>
+<p>{{aartist.name}}</p>
+  }
+} @else{
+<p>artist not found</p>
+}
+
+
+
+<p> end of comp</p>

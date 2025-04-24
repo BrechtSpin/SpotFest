@@ -1,0 +1,27 @@
+@if (!selectedArtist()) {
+<input type="text"
+       [value]="searchName()"
+       (input)="onInput($event)"
+       placeholder="Search for artist..."
+       class="form-control mb-2" />
+
+
+@if (artists().length > 0) {
+<ul class="list-group">
+  @for (artist of artists(); track artist.name) {
+  <li class="list-group-item"
+      (click)="selectArtist(artist)"
+      [style.cursor]="'pointer'"
+      [style.fontWeight]="selectedArtist()?.spotifyId === artist.spotifyId ? 'bold' : 'normal'">
+    {{ artist.name }}
+  </li>
+  }
+</ul>
+}
+}
+
+@if (selectedArtist()) {
+<div class="mt-2">
+  <p>Selected: {{ selectedArtist()?.name }}</p>
+</div>
+}
