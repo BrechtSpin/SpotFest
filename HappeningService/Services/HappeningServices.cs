@@ -8,7 +8,15 @@ public class HappeningServices(HappeningContext happeningContext) : IHappeningSe
     private readonly HappeningContext _happeningContext = happeningContext;
     public async Task HappeningArtistStoreInDB(HappeningArtist happeningArtist)
     {
-        await _happeningContext.HappeningArtists.AddAsync(happeningArtist);
-        await _happeningContext.SaveChangesAsync();
+        try
+        {
+            await _happeningContext.HappeningArtists.AddAsync(happeningArtist);
+            await _happeningContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex); // or log it properly
+            throw; // rethrow if you want
+        }
     }
 }

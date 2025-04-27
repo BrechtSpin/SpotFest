@@ -4,11 +4,16 @@ using MassTransit;
 
 namespace ArtistService.Messaging.Consumers;
 
-public class HappeningArtistIncompleteConsumer(IArtistServices artistServices) : IConsumer<HappeningArtistIncomplete>
+public class HappeningArtistIncompleteConsumer(
+    ILogger<HappeningArtistIncompleteConsumer> logger,
+    IArtistServices artistServices) : IConsumer<HappeningArtistIncomplete>
 {
+    private readonly ILogger _logger = logger;
     private readonly IArtistServices _artistServices = artistServices;
     public async Task Consume(ConsumeContext<HappeningArtistIncomplete> context)
     {
-       await _artistServices.ResolveHappeningArtist(context.Message);
+        var thisClass = this.ToString();
+        _logger.LogDebug("Consuming {thisClass}", thisClass);
+        await _artistServices.ResolveHappeningArtist(context.Message);
     }
 }
