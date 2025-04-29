@@ -29,7 +29,7 @@
     <h5>Artists</h5>
     @for (artistCtrl of happeningArtists.controls; let i = $index; track i) {
     <div [formGroupName]="i">
-      <app-artist-finder (artistSelected)="onArtistSelected($event, i)"></app-artist-finder>
+      <app-artist-search (artistSelected)="onArtistSelected($event, i)"></app-artist-search>
       <button type="button" (click)="removeArtist(i)" class="btn btn-danger">Remove Artist</button>
     </div>
     }

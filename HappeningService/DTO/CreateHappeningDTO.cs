@@ -3,8 +3,8 @@
 public class CreateHappeningDTO
 {
     public required string Name { get; set; }
-    public required DateTime StartDate { get; set; }
-    public DateTime? EndDate { get; set; }
+    public required DateOnly StartDate { get; set; }
+    public DateOnly? EndDate { get; set; }
 
     public List<HappeningArtistIncompleteDTO> HappeningArtists { get; set; } = [];
 }

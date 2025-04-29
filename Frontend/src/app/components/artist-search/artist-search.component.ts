@@ -1,14 +1,14 @@
 import { Component, effect, signal, inject, Output, EventEmitter } from '@angular/core';
-import { debouncedSignal } from '../utils/debounced-signal';
-import { ArtistService } from '../services/artist.service'
-import { HappeningArtist } from '../models/happening-artist';
+import { debouncedSignal } from '@utils/debounced-signal';
+import { ArtistService } from '@services/artist.service'
+import { HappeningArtist } from '@models/happening-artist';
 
 @Component({
-  selector: 'app-artist-finder',
+  selector: 'app-artist-search',
   standalone: true,
-  templateUrl: './artist-finder.component.html'
+  templateUrl: './artist-search.component.html'
 })
-export class ArtistFinderComponent {
+export class ArtistSearchComponent {
   private artistService = inject(ArtistService);
 
   searchName = signal('');

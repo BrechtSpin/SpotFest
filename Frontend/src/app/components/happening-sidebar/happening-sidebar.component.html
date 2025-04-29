@@ -1,0 +1,33 @@
+<div class="d-flex flex-column bg-light p-3" style="width: 280px; height: 100vh;">
+  <h5 class="mb-4">Events</h5>
+
+  <div [ngIf]="loading()" class="d-flex justify-content-center align-items-center flex-grow-1">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div [ngIf]="!loading()">
+    <!--<div [ngIf]="pastEvent()" class="mb-3">
+      <h6 class="text-muted">Past Event</h6>
+      <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action disabled">
+          {{ pastEvent().title }}<br>
+          <small>{{ pastEvent().date | date: 'mediumDate' }}</small>
+        </a>
+      </div>
+    </div>-->
+
+    <div>
+      <h6 class="text-success">Upcoming Events</h6>
+      <div class="list-group" @fadeInUp>
+        @for (happening of futureHappenings(); track happening.slug){
+        <a href="#" class="list-group-item list-group-item-action event-hover">
+          {{ happening.name }}<br>
+          <small>{{ happening.startDate}}</small>
+        </a>
+        }
+      </div>
+    </div>
+  </div>
+</div>

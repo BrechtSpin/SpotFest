@@ -2,17 +2,17 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { HappeningService } from '../services/happening.service'
-import { ArtistFinderComponent } from '../artist-finder/artist-finder.component'
-import { HappeningArtist } from '../models/happening-artist'
+import { HappeningService } from '@services/happening.service'
+import { ArtistSearchComponent } from '@components/artist-search/artist-search.component'
+import { HappeningArtist } from '@models/happening-artist'
 
 @Component({
-  selector: 'app-happening-form',
+  selector: 'app-happening-create-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ArtistFinderComponent],
-  templateUrl: './happening-form.component.html'
+  imports: [CommonModule, ReactiveFormsModule, ArtistSearchComponent],
+  templateUrl: './happening-create-form.component.html'
 })
-export class HappeningFormComponent {
+export class HappeningCreateFormComponent {
   happeningForm: FormGroup;
 
   constructor(

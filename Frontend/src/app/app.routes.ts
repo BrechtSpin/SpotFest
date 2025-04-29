@@ -1,16 +1,9 @@
-//import { NgModule } from '@angular/core';
 import { Routes } from '@angular/router';
+import { ArtistDetailsComponent } from '@components/artist-details/artist-details.component';
+import { HappeningCreateFormComponent } from '@components/happening-create-form/happening-create-form.component';
 
-import { ArtistDetailsComponent } from './artist-details/artist-details.component'
-import { HappeningFormComponent } from './happening/happening-form.component';
 
 export const routes: Routes = [
   { path: 'artist/:id', component: ArtistDetailsComponent },
-  { path: 'happening', component: HappeningFormComponent}
+  { path: 'happening', component: HappeningCreateFormComponent}
 ];
-
-//@NgModule({
-//  imports: [RouterModule.forRoot(routes)],
-//  exports: [RouterModule]
-//})
-//export class AppRoutingModule { }

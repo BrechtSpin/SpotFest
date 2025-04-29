@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router'
 
-import { Artist } from '../models/artist'
-import { ArtistService } from '../services/artist.service';
+import { Artist } from '@models/artist'
+import { ArtistService } from '@services/artist.service';
 
 @Component({
   selector: 'app-artist-details',

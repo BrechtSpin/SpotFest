@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using HappeningService.Models;
 
-namespace MusicHappenings.Repositories.Configuration;
+namespace HappeningService.Data.Repositories.Configuration;
 
 public class HappeningConfiguration : IEntityTypeConfiguration<Happening>
 {
@@ -23,11 +23,14 @@ public class HappeningConfiguration : IEntityTypeConfiguration<Happening>
                .HasMaxLength(255)
                .IsRequired();
 
-        builder.Property(h => h.StartTime)
-               .HasColumnType("datetime")
+        builder.HasIndex(h => h.StartDate);
+        builder.Property(h => h.StartDate)
+               .HasColumnType("date")               
                .IsRequired();
 
-        builder.Property(h => h.EndTime)
-               .HasColumnType("datetime");
+        builder.HasIndex(h => h.EndDate);
+        builder.Property(h => h.EndDate)
+               .HasColumnType("date")
+               .IsRequired();
     }
 }

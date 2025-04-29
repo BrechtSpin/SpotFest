@@ -1,17 +1,24 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-import { Happening } from '../models/happening'
+import { environment } from '@env/environment';
+import { CreateHappening } from '@models/create-happening'
+import { HappeningSummary } from '@models/happening-summary';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HappeningService {
-  private apiUrl = '/happening';
+  private Url = `${environment.apiHappeningUrl}`;
 
   constructor(private http: HttpClient) { }
 
-  createHappening(happening: Happening) {
-    return this.http.post(this.apiUrl, happening);
+  createHappening(createHappening: CreateHappening) {
+    return this.http.post(`${this.Url}/new`, createHappening);
+  }
+
+  getCurrentAndUpcomingHappenings(): Observable<HappeningSummary[]> {
+    return this.http.get<HappeningSummary[]>(`${this.Url}/current`)
   }
 }

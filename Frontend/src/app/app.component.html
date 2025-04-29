@@ -1,5 +1,17 @@
 
+<!--<app-header></app-header>-->
 
-<app-happening-form></app-happening-form>
+<div class="main-layout">
+  <!-- Use the sidebar component -->
+  <app-happening-sidebar></app-happening-sidebar>
 
-<router-outlet />
+  <!-- Main content changes with route -->
+  <main class="content">
+    <app-happening-create-form></app-happening-create-form>
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<!--<app-happening-form></app-happening-form>
+
+<router-outlet />-->

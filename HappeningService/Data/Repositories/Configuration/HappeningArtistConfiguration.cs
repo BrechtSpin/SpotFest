@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace MusicHappenings.Repositories.Configuration;
+namespace HappeningService.Data.Repositories.Configuration;
 
 public class HappeningArtistConfiguration : IEntityTypeConfiguration<HappeningArtist>
 {

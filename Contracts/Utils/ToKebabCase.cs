@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
+namespace Contracts.Utils;
 public static class StringExtensions
 {
     public static string ToKebabCase(this string str)
@@ -10,7 +11,7 @@ public static class StringExtensions
         // Replace whitespace with hyphens
         str = Regex.Replace(str.Trim(), @"\s+", "-");
 
-        // Insert hyphen between camelCase words (optional, if used)
+        // Insert hyphen between camelCase words 
         str = Regex.Replace(str, "(?<!^)([A-Z])", "-$1");
 
         // Remove invalid characters

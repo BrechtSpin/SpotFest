@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ArtistService.Repositories;
 using ArtistService.Messaging;
 using ArtistService.Services;
+using ArtistService.EndPoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,19 +18,25 @@ builder.Services.AddDbContext<ArtistServiceContext>(options =>
 builder.Services.AddMassTransitConfiguration(builder.Configuration);
 builder.Services.AddScoped<IPublisherService, PublisherService>();
 
-builder.Services.AddControllers();
-
 #if DEBUG
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddCors(options =>
     options.AddPolicy("dev", builder =>
     {
-        builder.AllowAnyOrigin();
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
     }));
 #endif
 
 var app = builder.Build();
 
 #if DEBUG
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseCors("dev");
 #endif
 
@@ -41,8 +48,6 @@ using (var scope = app.Services.CreateScope())
 
 // Configure the HTTP request pipeline.
 
-app.UseAuthorization();
-
-app.MapControllers();
+app.MapHappeningApiEndpoints();
 
 app.Run();

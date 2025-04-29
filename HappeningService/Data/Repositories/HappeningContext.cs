@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using HappeningService.Models;
-using MusicHappenings.Repositories.Configuration;
+using HappeningService.Data.Repositories.Configuration;
 
-namespace HappeningService.Repositories;
+namespace HappeningService.Data.Repositories;
 
 public class HappeningContext(DbContextOptions<HappeningContext> options) : DbContext(options)
 {

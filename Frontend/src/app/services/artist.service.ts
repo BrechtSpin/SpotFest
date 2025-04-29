@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from '../environments/environment';
 
-import { Artist } from '../models/artist';
+import { environment } from '@env/environment';
+import { Artist } from '@models/artist';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArtistService {
 
-  private apiUrl = `${environment.artistAPI}`;
+  private apiUrl = `${environment.apiArtistUrl}`;
 
   private artistInfoSubject = new BehaviorSubject<Artist | undefined>(undefined);
   public artistInfo$ = this.artistInfoSubject.asObservable();
