@@ -44,8 +44,8 @@ services:
       - rabbitmq
       - spotfest-db
     build:
-      context: ./HappeningService
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: HappeningService/Dockerfile
     networks:
       - traefik
       - spotfest
@@ -69,8 +69,8 @@ services:
       - rabbitmq
       - spotfest-db
     build:
-      context: ./ArtistService
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ArtistService/Dockerfile
     networks:
       - traefik
       - spotfest
@@ -93,8 +93,8 @@ services:
     depends_on:
       - rabbitmq
     build:
-      context: ./DataHarvester
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: DataHarvester/Dockerfile
     networks:
       - traefik
       - spotfest
@@ -116,8 +116,8 @@ services:
   jobscheduler:
     container_name: jobscheduler
     build:
-      context: ./JobScheduler
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: JobScheduler/Dockerfile
     depends_on:
       - rabbitmq
       - spotfest-db
