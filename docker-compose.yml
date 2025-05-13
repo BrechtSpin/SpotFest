@@ -3,6 +3,11 @@ services:
     container_name: rabbitmq
     image: rabbitmq:3-management
     restart: always
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
@@ -28,6 +33,11 @@ services:
     container_name: spotfest-db
     image: mysql:8.0
     restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - spotfest-db_data:/var/lib/mysql
     networks:
@@ -41,8 +51,10 @@ services:
   happeningservice:
     container_name: happeningservice
     depends_on:
-      - rabbitmq
-      - spotfest-db
+      rabbitmq:
+        condition: service_healthy
+      spotfest-db:
+        condition: service_healthy
     build:
       context: .
       dockerfile: HappeningService/Dockerfile
@@ -66,8 +78,10 @@ services:
   artistservice:
     container_name: artistservice
     depends_on:
-      - rabbitmq
-      - spotfest-db
+      rabbitmq:
+        condition: service_healthy
+      spotfest-db:
+        condition: service_healthy
     build:
       context: .
       dockerfile: ArtistService/Dockerfile
@@ -91,7 +105,8 @@ services:
   dataharvester:
     container_name: dataharvester
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     build:
       context: .
       dockerfile: DataHarvester/Dockerfile
@@ -119,8 +134,10 @@ services:
       context: .
       dockerfile: JobScheduler/Dockerfile
     depends_on:
-      - rabbitmq
-      - spotfest-db
+      rabbitmq:
+        condition: service_healthy
+      spotfest-db:
+        condition: service_healthy
     networks:
       - spotfest
     environment:
