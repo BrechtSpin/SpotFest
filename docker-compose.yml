@@ -15,13 +15,12 @@ services:
       - spotfest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.rabbitmq.rule=Host(`brechtspin.duckdns.org`)"
+      - "traefik.http.routers.rabbitmq.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/dash`)"
       - "traefik.http.routers.rabbitmq.entrypoints=websecure"
       - "traefik.http.routers.rabbitmq.tls=true"
       - "traefik.http.routers.rabbitmq.tls.certresolver=myresolver"
       # Route dashboard
       - "traefik.http.services.rabbitmq.loadbalancer.server.port=15672"
-      - "traefik.http.routers.rabbitmq.rule=PathPrefix(`/dash`)"
       - "traefik.http.routers.rabbitmq.middlewares=strip-dash"
       - "traefik.http.middlewares.strip-dash.stripprefix.prefixes=/dash"
     environment:
