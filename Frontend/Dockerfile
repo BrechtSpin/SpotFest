@@ -1,20 +1,18 @@
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 
 WORKDIR /app
-
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 COPY . .
-
 RUN npm run build --prod
 
-# Install a lightweight static server
-RUN npm install -g http-server
 
-# Set the working dir to the built Angular app
-WORKDIR /app/dist/Frontend
+FROM node:20-alpine AS runtime
+RUN npm install -g serve
+
+WORKDIR /app
+COPY --from=builder /app/dist/*/browser ./
 
 EXPOSE 80
-
-CMD ["http-server", "-p", "80"]
+CMD ["serve", "-s", ".", "-l", "80"]
