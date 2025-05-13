@@ -120,7 +120,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - rabbitmq
-      - mysql
+      - spotfest-db
     networks:
       - spotfest
     environment:
