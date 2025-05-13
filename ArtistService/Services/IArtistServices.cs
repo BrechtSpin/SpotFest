@@ -9,7 +9,7 @@ public interface IArtistServices
     public Task ArtistMetricStoreInDB(ArtistMetric artistMetric);
     public Task ArtistMetricDataJob(SchedulerJob Job);
     public Task<ArtistSummary[]> ArtistSummariesFromGuids(Guid[] guids);
-    public Task<ArtistWithMetricsDTO> GetArtistWithMetrics(Guid guid);
+    public Task<ArtistWithMetricsDTO?> GetArtistWithMetrics(Guid guid);
 
 
 }
