@@ -1,8 +1,11 @@
 # Use .NET SDK image for building the application
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-artistservice
 WORKDIR /app
-COPY *.csproj ./
-RUN dotnet restore
+
+COPY ArtistService/ArtistService.csproj ArtistService/
+COPY Contracts/Contracts.csproj Contracts/
+
+RUN dotnet restore ArtistService/ArtistService.csproj
 COPY . ./
 RUN dotnet publish -c Release -o out
 

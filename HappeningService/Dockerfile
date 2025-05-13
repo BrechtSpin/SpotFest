@@ -1,8 +1,11 @@
 # Use the official .NET SDK image for building the application
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-happeningservice
 WORKDIR /app
-COPY *.csproj ./
-RUN dotnet restore
+
+COPY HappeningService/HappeningService.csproj HappeningService/
+COPY Contracts/Contracts.csproj Contracts/
+
+RUN dotnet restore HappeningService/HappeningService.csproj
 COPY . ./
 RUN dotnet publish -c Release -o out
 

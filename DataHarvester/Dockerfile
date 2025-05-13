@@ -1,8 +1,11 @@
 # Use the official .NET SDK image for building the application
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-dataharvester
 WORKDIR /app
-COPY *.csproj ./
-RUN dotnet restore
+
+COPY DataHarvester/DataHarvester.csproj DataHarvester/
+COPY Contracts/Contracts.csproj Contracts/
+
+RUN dotnet restore DataHarvester/DataHarvester.csproj
 COPY . ./
 RUN dotnet publish -c Release -o out
 
