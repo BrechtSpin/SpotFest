@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLogging();
 builder.Services.AddScoped<IArtistServices, ArtistServices>();
 
-var connectionString = builder.Configuration.GetConnectionString("ArtistServiceDB");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ArtistServiceContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 

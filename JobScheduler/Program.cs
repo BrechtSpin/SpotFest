@@ -7,7 +7,7 @@ var builder = Host.CreateApplicationBuilder(args);
 
 builder.Services.AddHostedService<JobSchedulerWorker>();
 
-var connectionString = builder.Configuration.GetConnectionString("JobSchedulerDB");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<JobSchedulerContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
