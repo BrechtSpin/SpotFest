@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { HappeningService } from '@services/happening.service'
@@ -9,7 +9,7 @@ import { HappeningArtist } from '@models/happening-artist'
 @Component({
   selector: 'app-happening-create-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ArtistSearchComponent],
+  imports: [ReactiveFormsModule, ArtistSearchComponent],
   templateUrl: './happening-create-form.component.html'
 })
 export class HappeningCreateFormComponent {
@@ -34,7 +34,7 @@ export class HappeningCreateFormComponent {
   addArtist() {
     this.happeningArtists.push(this.fb.group({
       name: [''],
-      spotifyId: ['']
+      spotifyId: ['', Validators.required]
     }));
   }
 
@@ -53,7 +53,6 @@ export class HappeningCreateFormComponent {
 
   submit() {
     if (this.happeningForm.valid) {
-      //console.log('Form value:', this.happeningForm.value);
       const rawValue = this.happeningForm.value;
       console.log('raw form:', rawValue);
       const sanitized = {

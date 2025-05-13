@@ -1,4 +1,5 @@
-﻿using HappeningService.Messaging.Consumers;
+﻿using Contracts;
+using HappeningService.Messaging.Consumers;
 using MassTransit;
 namespace HappeningService.Messaging;
 
@@ -11,6 +12,8 @@ public static class MassTransitConfig
             config.SetKebabCaseEndpointNameFormatter();
 
             config.AddConsumer<HappeningArtistCompleteConsumer>();
+
+            config.AddRequestClient<ArtistFetchSummariesRequest>();
 
             config.UsingRabbitMq((context, cfg) =>
             {

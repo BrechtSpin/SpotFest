@@ -1,4 +1,5 @@
-﻿using DataHarvester.Messaging.Consumers;
+﻿using Contracts;
+using DataHarvester.Messaging.Consumers;
 using MassTransit;
 
 namespace DataHarvester.Messaging;
@@ -11,7 +12,8 @@ public static class MassTransitConfig
         {
             config.SetKebabCaseEndpointNameFormatter();
 
-            config.AddConsumer<ArtistMetricTaskConsumer>();
+            config.AddConsumer<ArtistMetricRequestConsumer>();
+            config.AddConsumer<ArtistSpotifyRequestConsumer>();
 
             config.UsingRabbitMq((context, cfg) =>
             {

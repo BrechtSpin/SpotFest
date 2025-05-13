@@ -10,5 +10,5 @@ namespace DataHarvester.SpotifyWeb;
 public interface ISpotifyWebApiClient
 {
     public Task<SpotifyArtist> GetArtistAsync(string spotifyId);
-    public Task<List<SpotifyArtist>> GetArtistsByNameAsync(string artistName);
+    public Task<List<SpotifyArtist>> GetArtistsByNameAsync(string artistName, int amount = 5);
 }

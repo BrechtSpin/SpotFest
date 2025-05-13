@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using ArtistService.Repositories;
 using ArtistService.Messaging;
 using ArtistService.Services;
 using ArtistService.EndPoints;
+using ArtistService.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +48,6 @@ using (var scope = app.Services.CreateScope())
 
 // Configure the HTTP request pipeline.
 
-app.MapHappeningApiEndpoints();
+app.MapArtistApiEndpoints();
 
 app.Run();

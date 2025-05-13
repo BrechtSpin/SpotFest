@@ -12,7 +12,7 @@ export class ArtistSearchComponent {
   private artistService = inject(ArtistService);
 
   searchName = signal('');
-  debouncedName = debouncedSignal(this.searchName, 300);
+  debouncedName = debouncedSignal(this.searchName, 200);
 
   artists = signal<HappeningArtist[]>([]);
   selectedArtist = signal<HappeningArtist | null>(null);

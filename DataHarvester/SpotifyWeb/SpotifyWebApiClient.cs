@@ -8,17 +8,11 @@ using System.Text.Json;
 
 namespace DataHarvester.SpotifyWeb;
 
-public class SpotifyWebApiClient : ISpotifyWebApiClient
+public class SpotifyWebApiClient(HttpClient httpclient, SpotifyWebApiClientTokenClient spotifyWebApiClientTokenClient) : ISpotifyWebApiClient
 {
-    private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient = httpclient;
     private const string ApiUri = "https://api.spotify.com/v1";
-    private SpotifyWebApiClientTokenClient _tokenClient;
-
-    public SpotifyWebApiClient(HttpClient httpclient, SpotifyWebApiClientTokenClient spotifyWebApiClientTokenClient)
-    {
-        _httpClient = httpclient;
-        _tokenClient = spotifyWebApiClientTokenClient;
-    }
+    private readonly SpotifyWebApiClientTokenClient _tokenClient = spotifyWebApiClientTokenClient;
 
     private async Task<string> GetSpotifyRequestAsync(string requestUri)
     {
@@ -36,10 +30,10 @@ public class SpotifyWebApiClient : ISpotifyWebApiClient
                     using StreamReader reader = new(await response.Content.ReadAsStreamAsync());
                     return await reader.ReadToEndAsync();
                 }
-            //case HttpStatusCode.BadRequest or HttpStatusCode.NotFound:
-            //    {
-            //        throw new ArgumentException("invalid SpotifyArtistUUID");
-            //    }
+            case HttpStatusCode.BadRequest:
+                {
+                    throw new ArgumentException($"invalid Uri {requestUri}",nameof(requestUri));
+                }
             default:
                 throw new NotImplementedException(response.StatusCode.ToString());
         }
@@ -50,10 +44,10 @@ public class SpotifyWebApiClient : ISpotifyWebApiClient
             $"{ApiUri}/artists/{spotifyId}");
         return JsonSerializer.Deserialize(message, SerializerContext.Default.SpotifyArtist)!;
     }
-    public async Task<List<SpotifyArtist>> GetArtistsByNameAsync(string artistName)
+    public async Task<List<SpotifyArtist>> GetArtistsByNameAsync(string artistName, int amount = 5)
     {
         var message = await GetSpotifyRequestAsync(
-            $"{ApiUri}/search?q={Uri.EscapeDataString(artistName)}&type=artist&limit=10");
+            $"{ApiUri}/search?q={Uri.EscapeDataString(artistName)}&type=artist&limit={amount}");
         var artistResponse = JsonSerializer.Deserialize(message, SerializerContext.Default.SpotifyArtistResponse)!;
         return artistResponse?.Artists?.Items ?? [];
     }

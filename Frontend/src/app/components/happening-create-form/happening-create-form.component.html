@@ -12,6 +12,8 @@
   </div>
 
   <div class="mb-3">
+    @if (happeningForm.get('startDate')?.touched && happeningForm.get('startDate')?.invalid){
+    <div class="text-danger">Starting Date is required.</div>}
     <label>
       Start date:
       <input type="date" formControlName="startDate" />
@@ -28,12 +30,22 @@
   <div formArrayName="happeningArtists" class="mb-3">
     <h5>Artists</h5>
     @for (artistCtrl of happeningArtists.controls; let i = $index; track i) {
-    <div [formGroupName]="i">
-      <app-artist-search (artistSelected)="onArtistSelected($event, i)"></app-artist-search>
-      <button type="button" (click)="removeArtist(i)" class="btn btn-danger">Remove Artist</button>
+    <div [formGroupName]="i" class="mb-2">
+      @if (happeningArtists.at(i).get('spotifyId')?.invalid
+      && happeningArtists.at(i).get('spotifyId')?.touched){
+      <div class="text-danger">Search and pick an artist from the list or remove it.</div>
+      }
+      <div class="d-flex align-items-center">
+        <app-artist-search (artistSelected)="onArtistSelected($event, i)"
+                           [class.is-invalid]="happeningArtists.at(i).get('spotifyId')?.invalid
+                                          && happeningArtists.at(i).get('spotifyId')?.touched">
+          >
+        </app-artist-search>
+        <button type="button" (click)="removeArtist(i)" class="btn btn-danger align-self-start ms-2">Cancel</button>
+      </div>
     </div>
-    }
-    <button type="button" (click)="addArtist()" class="btn btn-secondary">Add Artist</button>
+  }
+  <button type="button" (click)="addArtist()" class="btn btn-secondary">Add Artist</button>
   </div>
 
   <button type="submit">Create happening</button>

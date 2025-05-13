@@ -1,5 +1,7 @@
 ﻿using DataHarvester.Messaging;
 using Contracts;
+using DataHarvester.Models;
+using Jint.Parser.Ast;
 
 namespace DataHarvester.SpotifyWeb;
 
@@ -12,7 +14,7 @@ public class SpotifyHarvester(
     private readonly ISpotifyWebApiClient _webAPI = webAPI;
     private readonly IPublisherService _publisherService = publisherService;
 
-    public async Task FetchAndStoreSpotifyMetric(ArtistIdMap artistIdMap)
+    public async Task GetSpotifyMetric(ArtistIdMap artistIdMap)
     {
         if (artistIdMap is not null && artistIdMap.SpotifyId is not null)
         {
@@ -26,7 +28,35 @@ public class SpotifyHarvester(
                 Popularity = artistData.Popularity,
                 Listeners = listeners
             };
-            await _publisherService.ArtistMetricFetchedDataPublisher(NewMetric);
+            await _publisherService.ArtistMetricDataResponsePublisher(NewMetric);
         }
     }
+    public async Task<ArtistSpotifyResponse> GetArtistFromSpotify(ArtistSpotifyRequest request)
+    {
+        ArtistSpotifyResponse response;
+        SpotifyArtist spotifyArtist;
+        if (request.SpotifyId is null || request.SpotifyId == "")
+        {
+            spotifyArtist = (await _webAPI.GetArtistsByNameAsync(request.Name, 1))[0];
+            //what happens with by spotID? if name isn't matched?
+            if (spotifyArtist.Name != request.Name) throw new ArgumentException("Name doesn't match");
+        }
+        else
+        {
+            spotifyArtist = await _webAPI.GetArtistAsync(request.SpotifyId);
+        }
+
+        var images = spotifyArtist.Images
+            .OrderBy(x => x.height)
+            .ToList();
+        response = new()
+        {
+            Name = spotifyArtist.Name,
+            SpotifyId = spotifyArtist.Id,
+            PictureSmallUrl = images[0].url,
+            PictureMediumUrl = images[1].url,
+        };
+        return response;
+    }
+
 }

@@ -1,0 +1,32 @@
+.card-artist-summary {
+  display: block; 
+  text-decoration: none; 
+  color: inherit; 
+}
+
+.artist-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: gray;
+  overflow: hidden;
+
+  width: 200px;
+  margin: 8px;
+  height: 240px;
+}
+
+.artist-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.artist-name {
+  margin-top: 8px;
+  font-weight: 600;
+  text-align: end;
+}

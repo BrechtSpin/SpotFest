@@ -1,0 +1,23 @@
+.general-info {
+  padding: 16px;
+  border-bottom: 1px solid #eFe0e0;
+  margin-bottom: 24px;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 1.75rem;
+}
+
+.date,
+.location {
+  margin: 4px 0;
+  color: #555;
+}
+
+.artist-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-start;
+}

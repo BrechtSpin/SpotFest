@@ -1,17 +1,11 @@
 
-<!--<app-header></app-header>-->
+<app-navigation-bar></app-navigation-bar>
 
-<div class="main-layout">
-  <!-- Use the sidebar component -->
-  <app-happening-sidebar></app-happening-sidebar>
+<div class="main-layout d-flex">
+  <app-happening-sidebar class="sidebar flex-shrink-0"></app-happening-sidebar>
 
-  <!-- Main content changes with route -->
-  <main class="content">
-    <app-happening-create-form></app-happening-create-form>
+  <main class="content flex-grow-1 p-3">
     <router-outlet></router-outlet>
   </main>
 </div>
 
-<!--<app-happening-form></app-happening-form>
-
-<router-outlet />-->

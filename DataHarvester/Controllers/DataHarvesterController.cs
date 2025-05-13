@@ -17,7 +17,7 @@ public class DataHarvesterController(ISpotifyWebApiClient webClient) : Controlle
         var result = message.Select(artist => new DTO.ArtistDto
         {
             Name = artist.Name,
-            SpotifyId = artist.Id
+            SpotifyId = artist.Id,
         });
 
         return Ok(result);

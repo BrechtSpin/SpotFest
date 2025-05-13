@@ -4,24 +4,32 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { environment } from '@env/environment';
-import { Artist } from '@models/artist';
+import { ArtistWithMetrics } from '@models/artist-with-metrics';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArtistService {
 
-  private apiUrl = `${environment.apiArtistUrl}`;
+  private Url = `${environment.apiArtistUrl}`;
 
-  private artistInfoSubject = new BehaviorSubject<Artist | undefined>(undefined);
-  public artistInfo$ = this.artistInfoSubject.asObservable();
+  //private artistInfoSubject = new BehaviorSubject<ArtistFull | undefined>(undefined);
+  //public artistInfo$ = this.artistInfoSubject.asObservable();
   constructor(private http: HttpClient) { }
 
-  getArtistById(id: number): Observable<Artist | undefined> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.get<Artist>(url)
-      .pipe(catchError(this.handleError<Artist | undefined>('getArtistInfo', undefined)));
+  getArtistWithMetricsByGuid(guid: string, name: string | null): Observable<ArtistWithMetrics> {
+    /*if (!guid) { return of(null); }*/
+    if (!name) { name = ''; }
+    const myvar = this.http.get<ArtistWithMetrics>(`${this.Url}/${guid}/${name}`)
+    const avar = 1 + 2;
+    return myvar
   }
+
+  //getArtistById(id: number): Observable<ArtistFull | undefined> {
+  //  const url = `${this.apiUrl}/${id}`;
+  //  return this.http.get<ArtistFull>(url)
+  //    .pipe(catchError(this.handleError<ArtistFull | undefined>('getArtistInfo', undefined)));
+  //}
 
   getArtistByNameSpotify(searchterm: string): Observable<any> {
     return this.http.get(`artist/search`, { params: { name: searchterm }})

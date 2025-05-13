@@ -12,7 +12,11 @@ public static class MassTransitConfig
             config.SetKebabCaseEndpointNameFormatter();
 
             config.AddConsumer<HappeningArtistIncompleteConsumer>();
-            config.AddConsumer<ArtistMetricFetchedDataConsumer>();
+            config.AddConsumer<ArtistMetricHarvestResponseConsumer>();
+            config.AddConsumer<ArtistFetchSummariesRequestConsumer>();
+            config.AddConsumer<ArtistMetricJobConsumer>();
+
+            config.AddRequestClient<ArtistSpotifyRequest>(timeout: 100000000);
 
             config.UsingRabbitMq((context, cfg) =>
             {

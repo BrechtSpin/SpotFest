@@ -19,6 +19,7 @@ public class HappeningConfiguration : IEntityTypeConfiguration<Happening>
                .HasMaxLength(255)
                .IsRequired();
 
+        builder.HasIndex(h => h.Slug);
         builder.Property(h => h.Slug)
                .HasMaxLength(255)
                .IsRequired();

@@ -1,7 +1,10 @@
-﻿namespace HappeningService.Messaging
+﻿using Contracts;
+
+namespace HappeningService.Messaging
 {
     public interface IPublisherService
     {
-        Task IncompleteHappeningArtistPublisher(Guid happeningGuid, string spotifyId, string name);
+        Task HappeningArtistIncompletePublisher(HappeningArtistIncomplete happeningArtistIncomplete);
+        Task<ArtistSummary[]?> GetArtistsSummaryRPCAsync(Guid[] guids);
     }
 }

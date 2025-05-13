@@ -48,6 +48,8 @@ namespace HappeningService.Migrations
 
                     b.HasIndex("EndDate");
 
+                    b.HasIndex("Slug");
+
                     b.HasIndex("StartDate");
 
                     b.ToTable("Happenings");

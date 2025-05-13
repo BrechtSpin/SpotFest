@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
-import { HappeningSidebarComponent } from'@components/happening-sidebar/happening-sidebar.component'
-import { HappeningCreateFormComponent } from '@components/happening-create-form/happening-create-form.component';
+import { NavigationBarComponent } from '@components/navigation-bar/navigation-bar.component'
+import { HappeningSidebarComponent } from '@components/happening-sidebar/happening-sidebar.component'
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, HappeningSidebarComponent, HappeningCreateFormComponent],
+  imports: [RouterOutlet,
+    NavigationBarComponent,
+    HappeningSidebarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
