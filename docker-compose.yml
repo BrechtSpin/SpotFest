@@ -114,7 +114,7 @@ services:
       - spotfest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api-rest.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.api-rest.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/artistsearch`)"
       - "traefik.http.routers.api-rest.entrypoints=websecure"
       - "traefik.http.routers.api-rest.tls=true"
       - "traefik.http.routers.api-rest.tls.certresolver=myresolver"

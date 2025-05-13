@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DataHarvester.Controllers;
 
 [ApiController]
-[Route("artist")]
+[Route("artistsearch")]
 public class DataHarvesterController(ISpotifyWebApiClient webClient) : ControllerBase
 {
     readonly ISpotifyWebApiClient _webClient = webClient;

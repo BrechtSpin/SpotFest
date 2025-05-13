@@ -12,27 +12,20 @@ import { ArtistWithMetrics } from '@models/artist-with-metrics';
 export class ArtistService {
 
   private Url = `${environment.apiArtistUrl}`;
+  private SearchUrl = `${environment.apiArtistsearchUrl}`
 
-  //private artistInfoSubject = new BehaviorSubject<ArtistFull | undefined>(undefined);
-  //public artistInfo$ = this.artistInfoSubject.asObservable();
   constructor(private http: HttpClient) { }
 
   getArtistWithMetricsByGuid(guid: string, name: string | null): Observable<ArtistWithMetrics> {
     /*if (!guid) { return of(null); }*/
     if (!name) { name = ''; }
     const myvar = this.http.get<ArtistWithMetrics>(`${this.Url}/${guid}/${name}`)
-    const avar = 1 + 2;
     return myvar
   }
 
-  //getArtistById(id: number): Observable<ArtistFull | undefined> {
-  //  const url = `${this.apiUrl}/${id}`;
-  //  return this.http.get<ArtistFull>(url)
-  //    .pipe(catchError(this.handleError<ArtistFull | undefined>('getArtistInfo', undefined)));
-  //}
-
   getArtistByNameSpotify(searchterm: string): Observable<any> {
-    return this.http.get(`artist/search`, { params: { name: searchterm }})
+    return this.http.get(`${this.SearchUrl}/search`, { params: { name: searchterm } })
+    //return this.http.get(`artist/search`, { params: { name: searchterm }})
   }
 
   handleError<T>(operation = 'operation', result?: T) {
