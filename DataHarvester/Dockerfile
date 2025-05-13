@@ -12,5 +12,5 @@ WORKDIR /app
 COPY --from=build-dataharvester /app/out ./
 
 # Expose the port and define the entry point
-EXPOSE 80, 5672
+EXPOSE 80 5672
 ENTRYPOINT ["dotnet", "DataHarvester.dll"]

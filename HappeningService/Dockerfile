@@ -12,5 +12,5 @@ WORKDIR /app
 COPY --from=build-happeningservice /app/out ./
 
 # Expose the port and define the entry point
-EXPOSE 80, 5672
+EXPOSE 80 5672
 ENTRYPOINT ["dotnet", "HappeningService.dll"]
