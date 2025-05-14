@@ -62,11 +62,11 @@ services:
       - spotfest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api-rest.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.api-rest.entrypoints=websecure"
-      - "traefik.http.routers.api-rest.tls=true"
-      - "traefik.http.routers.api-rest.tls.certresolver=myresolver"
-      - "traefik.http.services.api-rest.loadbalancer.server.port=80"
+      - "traefik.http.routers.happening.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/api/happening`)"
+      - "traefik.http.routers.happening.entrypoints=websecure"
+      - "traefik.http.routers.happening.tls=true"
+      - "traefik.http.routers.happening.tls.certresolver=myresolver"
+      - "traefik.http.services.happening.loadbalancer.server.port=80"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__DefaultConnection: "Server=spotfest-db;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD}"  
@@ -89,11 +89,11 @@ services:
       - spotfest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api-rest.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.api-rest.entrypoints=websecure"
-      - "traefik.http.routers.api-rest.tls=true"
-      - "traefik.http.routers.api-rest.tls.certresolver=myresolver"
-      - "traefik.http.services.api-rest.loadbalancer.server.port=80"
+      - "traefik.http.routers.artist.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/api/artist`)"
+      - "traefik.http.routers.artist.entrypoints=websecure"
+      - "traefik.http.routers.artist.tls=true"
+      - "traefik.http.routers.artist.tls.certresolver=myresolver"
+      - "traefik.http.services.artist.loadbalancer.server.port=80"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__DefaultConnection: "Server=spotfest-db;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD}"  
@@ -114,11 +114,11 @@ services:
       - spotfest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api-rest.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/artistsearch`)"
-      - "traefik.http.routers.api-rest.entrypoints=websecure"
-      - "traefik.http.routers.api-rest.tls=true"
-      - "traefik.http.routers.api-rest.tls.certresolver=myresolver"
-      - "traefik.http.services.api-rest.loadbalancer.server.port=80"
+      - "traefik.http.routers.dataharvester.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/artistsearch`)"
+      - "traefik.http.routers.dataharvester.entrypoints=websecure"
+      - "traefik.http.routers.dataharvester.tls=true"
+      - "traefik.http.routers.dataharvester.tls.certresolver=myresolver"
+      - "traefik.http.services.dataharvester.loadbalancer.server.port=80"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       RabbitMQ__HostName: rabbitmq
@@ -153,11 +153,11 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.spa.rule=Host(`brechtspin.duckdns.org`)"
-      - "traefik.http.routers.spa.entrypoints=websecure"
-      - "traefik.http.routers.spa.tls=true"
-      - "traefik.http.routers.spa.tls.certresolver=myresolver"
-      - "traefik.http.services.spa.loadbalancer.server.port=80"
+      - "traefik.http.routers.frontend.rule=Host(`brechtspin.duckdns.org`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
 
 volumes:
   spotfest-db_data:
