@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, resource, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { lastValueFrom } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { HappeningService } from '@services/happening.service';
 import { HappeningSummary } from '@models/happening-summary';
@@ -7,23 +8,26 @@ import { HappeningSummary } from '@models/happening-summary';
 @Component({
   selector: 'app-happening-sidebar',
   standalone: true,
-  imports: [CommonModule,  RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './happening-sidebar.component.html',
 })
-export class HappeningSidebarComponent {
-  currentHappenings = signal<HappeningSummary[]>([]);
-  futureHappenings = signal<HappeningSummary[]>([]);
-  loading = signal(true);
+export class HappeningSidebarComponent{
+  private happeningService = inject(HappeningService) ;
 
-  constructor(private happeningService: HappeningService) {
-  this.getHappenings()}
+  happeningResource = resource<HappeningSummary[], void >({
+    loader: async () =>
+      await lastValueFrom(this.happeningService.getCurrentAndUpcomingHappenings()),
+    defaultValue: [] as HappeningSummary[],
+  });
 
-  private getHappenings() {
-    this.happeningService.getCurrentAndUpcomingHappenings().subscribe((happenings) => {
-      const now = new Date().toISOString().split('T')[0];
-      this.currentHappenings.set(happenings.filter(e => e.startDate <= now));
-      this.futureHappenings.set(happenings.filter(e => e.startDate > now));
-      this.loading.set(false);
-    });
-  }
+  currentHappenings = computed(() =>
+    this.happeningResource.value().filter(h => new Date(h.startDate) <= new Date())
+  );
+  futureHappenings = computed(() =>
+    this.happeningResource.value().filter(h => new Date(h.startDate) > new Date())
+  );
+
+  loading = computed(() => this.happeningResource.isLoading());
+  error = computed(() => this.happeningResource.error());
+
 }
