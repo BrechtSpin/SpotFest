@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient<SpotifyWebApiClientTokenClient>();
 builder.Services.AddHttpClient<ISpotifyWebApiClient, SpotifyWebApiClient>();
 builder.Services.AddSingleton<SpotifyWebApiClientTokenClient>();
+builder.Services.AddSingleton<SpotifyRateLimiter>();
 builder.Services.AddScoped<ISpotifyWebApiClient, SpotifyWebApiClient>();
 builder.Services.AddScoped<ISpotifyWebScraper, SpotifyWebScraperAngleSharp>();
 builder.Services.AddScoped<SpotifyHarvester>();

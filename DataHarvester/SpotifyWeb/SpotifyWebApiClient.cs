@@ -5,17 +5,24 @@ using System;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Threading.RateLimiting;
 
 namespace DataHarvester.SpotifyWeb;
 
-public class SpotifyWebApiClient(HttpClient httpclient, SpotifyWebApiClientTokenClient spotifyWebApiClientTokenClient) : ISpotifyWebApiClient
+public class SpotifyWebApiClient(
+    HttpClient httpclient,
+    SpotifyRateLimiter spotifyRateLimiter,
+    SpotifyWebApiClientTokenClient spotifyWebApiClientTokenClient) : ISpotifyWebApiClient
 {
     private readonly HttpClient _httpClient = httpclient;
+    private readonly SlidingWindowRateLimiter _rateLimiter = spotifyRateLimiter.GetSlidingWindowRateLimiter();
     private const string ApiUri = "https://api.spotify.com/v1";
     private readonly SpotifyWebApiClientTokenClient _tokenClient = spotifyWebApiClientTokenClient;
 
     private async Task<string> GetSpotifyRequestAsync(string requestUri)
     {
+        // limiter before token
+        using var lease = await _rateLimiter.AcquireAsync(1);
         var token = await _tokenClient.GetTokenAsync();
 
         var request = new HttpRequestMessage(HttpMethod.Get,
