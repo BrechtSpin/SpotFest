@@ -3,7 +3,7 @@ using HappeningService.Models;
 
 namespace HappeningService.DTO;
 
-public class HappeningWithArtistSummaries
+public record HappeningWithArtistSummaries
 {
     public required string Name { get; set; }
     public required string Slug { get; set; }

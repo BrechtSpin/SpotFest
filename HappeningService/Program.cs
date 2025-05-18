@@ -3,19 +3,22 @@ using HappeningService.EndPoints;
 using HappeningService.Messaging;
 using HappeningService.Services;
 using HappeningService.Data.Repositories;
+using HappeningService.Services.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<IHappeningService, HappeningServices>();
+builder.Services.AddScoped<IHappeningServices, HappeningServices>();
+builder.Services.AddMemoryCache();
+builder.Services.AddSignalR();
+builder.Services.AddScoped<IHappeningsCurrentTimeframeService, HappeningsCurrentTimeframeService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<HappeningContext>(options =>
+builder.Services.AddDbContextFactory<HappeningContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddMassTransitConfiguration(builder.Configuration);
 builder.Services.AddScoped<IPublisherService, PublisherService>();
-
 
 #if DEBUG
 builder.Services.AddEndpointsApiExplorer();
@@ -23,10 +26,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
     options.AddPolicy("dev", builder =>
-    {
-        builder.AllowAnyOrigin()
+    {    
+        builder.WithOrigins("http://localhost:60000")
                .AllowAnyMethod()
-               .AllowAnyHeader();
+               .AllowAnyHeader()
+              .AllowCredentials();
     }));
 #endif
 

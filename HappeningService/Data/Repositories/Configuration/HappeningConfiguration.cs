@@ -16,7 +16,7 @@ public class HappeningConfiguration : IEntityTypeConfiguration<Happening>
         builder.Property(h => h.Guid).IsRequired();
 
         builder.Property(h => h.Name)
-               .HasMaxLength(255)
+               .HasMaxLength(200)
                .IsRequired();
 
         builder.HasIndex(h => h.Slug);

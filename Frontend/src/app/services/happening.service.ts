@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '@env/environment';
-import { CreateHappening } from '@models/create-happening'
-import { HappeningSummary } from '@models/happening-summary';
+import { CreateHappening } from '@models/create-happening';
 import { HappeningFull } from '@models/happening-full';
 
 @Injectable({
@@ -13,7 +12,9 @@ import { HappeningFull } from '@models/happening-full';
 export class HappeningService {
   private Url = `${environment.apiHappeningUrl}`;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
   getHappeningFull(slug: string | null): Observable<HappeningFull> {
     if (!slug) {
@@ -27,7 +28,8 @@ export class HappeningService {
     return this.http.post(`${this.Url}/new`, createHappening);
   }
 
-  getCurrentAndUpcomingHappenings(): Observable<HappeningSummary[]> {
-    return this.http.get<HappeningSummary[]>(`${this.Url}/current`)
-  }
+  //deprecated
+  //getCurrentAndUpcomingHappenings(): Observable<HappeningSummary[]> {
+  //  return this.http.get<HappeningSummary[]>(`${this.Url}/current`)
+  //}
 }

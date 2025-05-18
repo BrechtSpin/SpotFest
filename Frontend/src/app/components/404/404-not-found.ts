@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-404',
+  standalone: true,
   //  templateUrl: './404-not-found.component.html',
   template: `
   <div>

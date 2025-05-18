@@ -1,4 +1,3 @@
-// src/app/graph/graph.component.ts
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
