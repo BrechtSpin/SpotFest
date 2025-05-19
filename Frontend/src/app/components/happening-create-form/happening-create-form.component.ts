@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { HappeningService } from '@services/happening.service'
 import { ArtistSearchComponent } from '@components/artist-search/artist-search.component'
@@ -15,6 +16,7 @@ import { HappeningArtist } from '@models/happening-artist'
 export class HappeningCreateFormComponent {
   private fb = inject(FormBuilder);
   private happeningService = inject(HappeningService);
+  private router = inject(Router)
 
   happeningForm: FormGroup = this.fb.group({
     name: ['', Validators.required],
@@ -47,7 +49,6 @@ export class HappeningCreateFormComponent {
   }
 
   onArtistSelected(artist: HappeningArtist, index: number) {
-    console.log('Selected artist:', artist);
     this.happeningArtists.at(index).patchValue({
       spotifyId: artist.spotifyId,
       name: artist.name
@@ -58,14 +59,12 @@ export class HappeningCreateFormComponent {
   submit() {
     if (this.happeningForm.valid) {
       const rawValue = this.happeningForm.value;
-      console.log('raw form:', rawValue);
       const sanitized = {
         ...rawValue,
         endDate: rawValue.endDate || null,
       };
-      console.log('Sanitized form:', sanitized);
       this.happeningService.createHappening(sanitized).subscribe({
-        next: (res) => console.log('Created:', res),
+        next: (res) => this.router.navigate(['/happening', res.slug]),
         error: (err) => console.error('Error:', err)
       });
     } else {

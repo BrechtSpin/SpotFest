@@ -24,8 +24,8 @@ export class HappeningService {
     }
   }
 
-  createHappening(createHappening: CreateHappening) {
-    return this.http.post(`${this.Url}/new`, createHappening);
+  createHappening(createHappening: CreateHappening): Observable<{ slug: string }> {
+    return this.http.post<{ slug: string }>(`${this.Url}/new`, createHappening);
   }
 
   //deprecated

@@ -42,7 +42,7 @@ public static class HappeningApi
     {
         var Slug = await service.CreateHappeningAsync(dto);
         await currentTimeframeService.OnChangedDataAsync();
-        return Results.Created($"/happenings/{Slug}", null);
+        return Results.Created($"/happening/{Slug}", new { slug = Slug });
     }
     // deprecated
     //private static async Task<IResult> GetHappeningsCurrentTimeframe(IHappeningServices service)
