@@ -17,6 +17,9 @@ public static class StringExtensions
         // Remove invalid characters
         str = Regex.Replace(str, @"[^a-zA-Z0-9\-]", "");
 
+        // remove duplicate -
+        str = Regex.Replace(str, "-{2,}", "-");
+
         return str.ToLowerInvariant();
     }
 }
