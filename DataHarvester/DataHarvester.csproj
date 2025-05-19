@@ -10,6 +10,7 @@
     <PackageReference Include="anglesharp" Version="1.3.0" />
     <PackageReference Include="anglesharp.js" Version="0.15.0" />
     <PackageReference Include="masstransit.rabbitMQ" Version="8.4.0" />
+    <PackageReference Include="Polly.core" Version="8.5.2" />
   </ItemGroup>
 
   <ItemGroup>
