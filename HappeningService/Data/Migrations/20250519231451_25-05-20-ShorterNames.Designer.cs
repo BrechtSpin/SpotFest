@@ -4,16 +4,19 @@ using HappeningService.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace HappeningService.Migrations
+namespace HappeningService.Data.Migrations
 {
     [DbContext(typeof(HappeningContext))]
-    partial class HappeningContextModelSnapshot : ModelSnapshot
+    [Migration("20250519231451_25-05-20-ShorterNames")]
+    partial class _250520ShorterNames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
