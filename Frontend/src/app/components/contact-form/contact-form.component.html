@@ -1,0 +1,51 @@
+<div class="card p-4 max-w-md mx-auto">
+  <h2 class="text-xl font-bold mb-4">Get Access to this GitHub</h2>
+
+  <form [formGroup]="contactForm" (ngSubmit)="submit()">
+
+    @if(!submitted || contactForm.invalid){
+
+    <div class="block mb-4">
+      <label for="name" class="form-label"
+             [ngClass]="{'text-danger': isInvalid('name'),
+                         'text-muted': !isInvalid('name')}">
+        @if(isInvalid('name')){Please enter your name}@else{Name}
+      </label>
+      <input id="name"
+             formControlName="name"
+             type="text"
+             class="form-control"
+             [class.is-invalid]="isInvalid('name')" />
+    </div>
+
+    <div class="block mb-4">
+      <label for="email" class="form-label"
+             [ngClass]="{'text-danger': isInvalid('email'),
+                         'text-muted': !isInvalid('email')}">
+        @if(isInvalid('email')){Please enter a valid email}@else{Email}
+      </label>
+      <input id="email"
+             formControlName="email"
+             type="text"
+             class="form-control"
+             [class.is-invalid]="isInvalid('email')" />
+    </div>
+
+
+    <button type="submit"
+            class="mt-4 px-4 py-2 rounded shadow">
+      Submit
+    </button>
+    @if(errorMessage){
+    <div class="text-danger mt-2">{{ errorMessage }}</div>
+    }
+
+    }
+
+    @if(submitted && !contactForm.invalid){
+    <div class="text-center mt-4">
+      <p class="mb-4">Thanks for subscribing! Check your mail for your access link:</p>
+    </div>
+    }
+  </form>
+</div>

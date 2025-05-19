@@ -1,30 +1,38 @@
-<form [formGroup]="happeningForm" (ngSubmit)="submit()" class="container mt-4">
-  <div class="mb-3">
-    @if (happeningForm.get('name')?.touched && happeningForm.get('name')?.invalid) {
-    <div class="text-danger">Name is required.</div>
-    }
-    <label>Name:</label>
-    <input type="text"
+
+<form [formGroup]="happeningForm" (ngSubmit)="submit()">
+
+  <div class="block mb-4">
+    <label for="name" class="form-label"
+           [ngClass]="{'text-danger': isInvalid('name'),
+                     'text-muted': !isInvalid('name')}">
+      @if(isInvalid('name')){Name of the happening is required}@else{Name}
+    </label>
+    <input id="name"
            formControlName="name"
+           type="text"
            class="form-control"
-           [class.is-invalid]="happeningForm.get('name')?.touched && happeningForm.get('name')?.invalid" />
-
+           [class.is-invalid]="isInvalid('name')" />
   </div>
 
-  <div class="mb-3">
-    @if (happeningForm.get('startDate')?.touched && happeningForm.get('startDate')?.invalid){
-    <div class="text-danger">Starting Date is required.</div>}
-    <label>
-      Start date:
-      <input type="date" formControlName="startDate" />
+  <div class="block mb-4">
+    <label for="startDate" class="form-label"
+           [ngClass]="{'text-danger': isInvalid('startDate'),
+                     'text-muted': !isInvalid('startDate')}">
+      @if(isInvalid('startDate')){Start date is required}@else{Start date}
     </label>
+    <input id="startDate"
+           formControlName="startDate"
+           type="date"
+           class="form-control"
+           [class.is-invalid]="isInvalid('startDate')" />
   </div>
 
-  <div class="mb-3">
-    <label>
-      End date:
-      <input type="date" formControlName="endDate" />
-    </label>
+  <div class="block mb-4">
+    <label for="endDate" class="form-label">End date</label>
+    <input id="endDate"
+           formControlName="endDate"
+           type="date"
+           class="form-control" />
   </div>
 
   <div formArrayName="happeningArtists" class="mb-3">
@@ -41,12 +49,14 @@
                                           && happeningArtists.at(i).get('spotifyId')?.touched">
           >
         </app-artist-search>
-        <button type="button" (click)="removeArtist(i)" class="btn btn-danger align-self-start ms-2">Cancel</button>
+        <button type="button" (click)="removeArtist(i)" class="btn btn-danger align-self-start ms-2">Delete</button>
       </div>
     </div>
-  }
-  <button type="button" (click)="addArtist()" class="btn btn-secondary">Add Artist</button>
+    }
+    <button type="button" (click)="addArtist()" class="btn btn-secondary">Add Artist</button>
   </div>
-
-  <button type="submit">Create happening</button>
+  <button type="submit"
+          class="mt-4 px-4 py-2 rounded shadow">
+    Create happening
+  </button>
 </form>

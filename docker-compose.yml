@@ -15,7 +15,7 @@ services:
       - spotfest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.rabbitmq.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/dash`)"
+      - "traefik.http.routers.rabbitmq.rule=Host(`${DOMAIN}`) && PathPrefix(`/dash`)"
       - "traefik.http.routers.rabbitmq.entrypoints=websecure"
       - "traefik.http.routers.rabbitmq.tls=true"
       - "traefik.http.routers.rabbitmq.tls.certresolver=myresolver"
@@ -47,6 +47,28 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
+  informationservice:
+    container_name: informationservice
+    depends_on:
+      spotfest-db:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: informationService/Dockerfile
+    networks:
+      - traefik
+      - spotfest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.happening.rule=Host(`${DOMAIN}`) && PathPrefix(`/api/info`)"
+      - "traefik.http.routers.happening.entrypoints=websecure"
+      - "traefik.http.routers.happening.tls=true"
+      - "traefik.http.routers.happening.tls.certresolver=myresolver"
+      - "traefik.http.services.happening.loadbalancer.server.port=8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Server=spotfest-db;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD}"  
+      
   happeningservice:
     container_name: happeningservice
     depends_on:
@@ -62,7 +84,7 @@ services:
       - spotfest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.happening.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/api/happening`)"
+      - "traefik.http.routers.happening.rule=Host(`${DOMAIN}`) && PathPrefix(`/api/happening`)"
       - "traefik.http.routers.happening.entrypoints=websecure"
       - "traefik.http.routers.happening.tls=true"
       - "traefik.http.routers.happening.tls.certresolver=myresolver"
@@ -89,7 +111,7 @@ services:
       - spotfest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.artist.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/api/artist`)"
+      - "traefik.http.routers.artist.rule=Host(`${DOMAIN}`) && PathPrefix(`/api/artist`)"
       - "traefik.http.routers.artist.entrypoints=websecure"
       - "traefik.http.routers.artist.tls=true"
       - "traefik.http.routers.artist.tls.certresolver=myresolver"
@@ -114,7 +136,7 @@ services:
       - spotfest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dataharvester.rule=Host(`brechtspin.duckdns.org`) && PathPrefix(`/artistsearch`)"
+      - "traefik.http.routers.dataharvester.rule=Host(`${DOMAIN}`) && PathPrefix(`/artistsearch`)"
       - "traefik.http.routers.dataharvester.entrypoints=websecure"
       - "traefik.http.routers.dataharvester.tls=true"
       - "traefik.http.routers.dataharvester.tls.certresolver=myresolver"
@@ -153,7 +175,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`brechtspin.duckdns.org`)"
+      - "traefik.http.routers.frontend.rule=Host(`${DOMAIN}`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls=true"
       - "traefik.http.routers.frontend.tls.certresolver=myresolver"

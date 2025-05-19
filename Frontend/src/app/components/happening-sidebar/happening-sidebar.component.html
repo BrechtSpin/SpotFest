@@ -1,5 +1,4 @@
-<div class="d-flex flex-column p-3"
-     style="width: 250px;">
+<div class="p-3">
   <h5 class="mb-4">Happenings</h5>
 
   @if (loading()) {
@@ -18,7 +17,10 @@
       <h6>Ongoing Happenings </h6>
       <div class="list-group">
         @for (happening of currentHappenings(); track happening.slug){
-        <a [routerLink]="['/happening', happening.slug]" class="list-group-item list-group-item-action event-hover">
+        <a [routerLink]="['/happening', happening.slug]"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }"
+           class="list-group-item list-group-item-action event-hover">
           {{ happening.name }}<br>
           <small>{{ happening.startDate| date:'dd-MM-yyyy'}} to {{happening.endDate| date:'dd-MM-yyyy'}}</small>
         </a>
@@ -32,7 +34,10 @@
       <h6>Upcoming Happenings </h6>
       <div class="list-group">
         @for (happening of futureHappenings(); track happening.slug){
-        <a [routerLink]="['/happening', happening.slug]" class="list-group-item list-group-item-action event-hover">
+        <a [routerLink]="['/happening', happening.slug]"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }"
+           class="list-group-item list-group-item-action event-hover">
           {{ happening.name }}<br>
           <small>{{ happening.startDate| date:'dd-MM-yyyy'}} to {{happening.endDate| date:'dd-MM-yyyy'}}</small>
         </a>

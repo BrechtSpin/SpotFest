@@ -1,0 +1,5 @@
+.list-group-item.active {
+  background-color: #007bff;  /* bootstrap-primary blue */
+  color: #fff;
+  border-color: #007bff;
+}

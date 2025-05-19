@@ -66,7 +66,8 @@ public class HappeningServices(HappeningContext happeningContext,
             Name = createHappeningDTO.Name,
             Slug = $"{StringExtensions.ToKebabCase(createHappeningDTO.Name)}-{createHappeningDTO.StartDate.Year}",
             StartDate = createHappeningDTO.StartDate,
-            EndDate = createHappeningDTO.EndDate ?? createHappeningDTO.StartDate
+            EndDate = (DateOnly)(createHappeningDTO.EndDate is null || createHappeningDTO.EndDate < createHappeningDTO.StartDate
+                        ? createHappeningDTO.StartDate : createHappeningDTO.EndDate)
         };
 
         _happeningContext.Happenings.Add(happening);

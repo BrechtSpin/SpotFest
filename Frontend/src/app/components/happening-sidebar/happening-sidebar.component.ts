@@ -10,6 +10,7 @@ import { NotFound404Component } from '@components/404/404-not-found';
   standalone: true,
   imports: [CommonModule, RouterModule, NotFound404Component ],
   templateUrl: './happening-sidebar.component.html',
+  styleUrls: ['./happening-sidebar.component.css'],
 })
 export class HappeningSidebarComponent implements OnInit {
   private hub = inject(happeningHub);

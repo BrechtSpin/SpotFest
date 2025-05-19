@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { HappeningService } from '@services/happening.service'
@@ -9,22 +9,26 @@ import { HappeningArtist } from '@models/happening-artist'
 @Component({
   selector: 'app-happening-create-form',
   standalone: true,
-  imports: [ReactiveFormsModule, ArtistSearchComponent],
+  imports: [CommonModule, ReactiveFormsModule, ArtistSearchComponent],
   templateUrl: './happening-create-form.component.html'
 })
 export class HappeningCreateFormComponent {
-  happeningForm: FormGroup;
+  private fb = inject(FormBuilder);
+  private happeningService = inject(HappeningService);
 
-  constructor(
-    private fb: FormBuilder,
-    private happeningService: HappeningService
-  ) {
-    this.happeningForm = this.fb.group({
-      name: ['', Validators.required],
-      startDate: ['', Validators.required],
-      endDate: [''],
-      happeningArtists: this.fb.array([])
-    });
+  happeningForm: FormGroup = this.fb.group({
+    name: ['', Validators.required],
+    startDate: ['', Validators.required],
+    endDate: [''],
+    happeningArtists: this.fb.array([])
+  });
+
+  submitted = false;
+  errorMessage = '';
+
+  isInvalid(controlName: string) {
+    const ctrl = this.happeningForm.get(controlName)!;
+    return ctrl.invalid && (ctrl.touched || this.submitted);
   }
 
   get happeningArtists() {
