@@ -14,5 +14,5 @@ import { HappeningSidebarComponent } from '@components/happening-sidebar/happeni
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'Frontend';
+  title = 'SpotFest';
 }

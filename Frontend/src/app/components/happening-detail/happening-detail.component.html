@@ -1,8 +1,9 @@
-@if (loading()) {
+<div>
+  @if (loading()) {
   <p>Loading…</p>
-} @else if (error()) {
-<app-404></app-404>
-} @else {
+  } @else if (error()) {
+  <app-404></app-404>
+  } @else {
   <section class="general-info">
     <h1 class="title">{{ happening().name }}</h1>
     <p class="date">{{ happening().startDate | date:'longDate' }}</p>
@@ -10,11 +11,11 @@
 
   <div class="artist-list">
     @for (artist of happening().artistSummaries; track artist) {
-      <app-artist-summary
-        [guid]="artist.guid"
-        [name]="artist.name"
-        [pictureUrl]="artist.pictureSmallUrl">
-      </app-artist-summary>
+    <app-artist-summary [guid]="artist.guid"
+                        [name]="artist.name"
+                        [pictureUrl]="artist.pictureSmallUrl">
+    </app-artist-summary>
     }
   </div>
-}
+  }
+</div>

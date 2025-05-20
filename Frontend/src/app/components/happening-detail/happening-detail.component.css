@@ -1,18 +1,28 @@
+.happening {
+  display: flex;
+  flex: 1;
+}
+
 .general-info {
   padding: 16px;
   border-bottom: 1px solid #eFe0e0;
   margin-bottom: 24px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 }
 
 .title {
   margin: 0 0 8px;
   font-size: 1.75rem;
+  text-align: center;
 }
 
 .date,
 .location {
   margin: 4px 0;
   color: #555;
+  text-align: center;
 }
 
 .artist-list {
