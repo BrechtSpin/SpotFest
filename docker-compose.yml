@@ -74,7 +74,7 @@ services:
       MAIL_CLIENT_ID: ${MAIL_CLIENT_ID}
       MAIL_TENANT_ID: ${MAIL_TENANT_ID}
       MAIL_SECRET: ${MAIL_SECRET}
-      MAIL_SCOPES: ${MAIL_SCOPES
+      MAIL_SCOPES: ${MAIL_SCOPES}
 
   happeningservice:
     container_name: happeningservice
