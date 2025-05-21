@@ -1,4 +1,5 @@
 ﻿using InformationService.Models;
+using Microsoft.Extensions.Options;
 
 namespace InformationService.Extension;
 
@@ -27,6 +28,10 @@ public static class ConfigurationExtensions
             var scopesEnv = Environment.GetEnvironmentVariable("MAIL_SCOPES") ?? string.Empty;
             options.Scopes = scopesEnv.Split(';', StringSplitOptions.RemoveEmptyEntries);
         });
+
+
+        services.AddSingleton(sp => sp.GetRequiredService<IOptions<EmailSettings>>().Value);
+        services.AddSingleton(sp => sp.GetRequiredService<IOptions<TokenClientSettings>>().Value);
 
         return services;
     }
