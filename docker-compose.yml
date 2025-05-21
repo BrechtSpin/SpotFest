@@ -60,11 +60,11 @@ services:
       - spotfest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.happening.rule=Host(`${DOMAIN}`) && PathPrefix(`/api/info`)"
-      - "traefik.http.routers.happening.entrypoints=websecure"
-      - "traefik.http.routers.happening.tls=true"
-      - "traefik.http.routers.happening.tls.certresolver=myresolver"
-      - "traefik.http.services.happening.loadbalancer.server.port=8080"
+      - "traefik.http.routers.informationservice.rule=Host(`${DOMAIN}`) && PathPrefix(`/api/info`)"
+      - "traefik.http.routers.informationservice.entrypoints=websecure"
+      - "traefik.http.routers.informationservice.tls=true"
+      - "traefik.http.routers.informationservice.tls.certresolver=myresolver"
+      - "traefik.http.services.informationservice.loadbalancer.server.port=8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__DefaultConnection: "Server=spotfest-db;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD}"
@@ -74,8 +74,8 @@ services:
       MAIL_CLIENT_ID: ${MAIL_CLIENT_ID}
       MAIL_TENANT_ID: ${MAIL_TENANT_ID}
       MAIL_SECRET: ${MAIL_SECRET}
-      MAIL_SCOPES: ${MAIL_SCOPES}
-      
+      MAIL_SCOPES: ${MAIL_SCOPES
+
   happeningservice:
     container_name: happeningservice
     depends_on:
@@ -98,7 +98,7 @@ services:
       - "traefik.http.services.happening.loadbalancer.server.port=8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__DefaultConnection: "Server=spotfest-db;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD}"  
+      ConnectionStrings__DefaultConnection: "Server=spotfest-db;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD}"
       RabbitMQ__HostName: rabbitmq
       RabbitMQ__UserName: ${RABBITMQ_DEFAULT_USER}
       RabbitMQ__Password: ${RABBITMQ_DEFAULT_PASS}
@@ -125,7 +125,7 @@ services:
       - "traefik.http.services.artist.loadbalancer.server.port=8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__DefaultConnection: "Server=spotfest-db;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD}"  
+      ConnectionStrings__DefaultConnection: "Server=spotfest-db;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD}"
       RabbitMQ__HostName: rabbitmq
       RabbitMQ__UserName: ${RABBITMQ_DEFAULT_USER}
       RabbitMQ__Password: ${RABBITMQ_DEFAULT_PASS}
@@ -170,7 +170,7 @@ services:
       - spotfest
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__DefaultConnection: "Server=spotfest-db;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD}"  
+      ConnectionStrings__DefaultConnection: "Server=spotfest-db;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD}"
       RabbitMQ__HostName: rabbitmq
       RabbitMQ__UserName: ${RABBITMQ_DEFAULT_USER}
       RabbitMQ__Password: ${RABBITMQ_DEFAULT_PASS}
