@@ -17,11 +17,12 @@ public class ContactConfiguration : IEntityTypeConfiguration<Contact>
                .IsRequired();
 
         builder.Property(c => c.Name)
-               .HasMaxLength(255)
+               .HasMaxLength(200)
                .IsRequired();
 
+        builder.HasIndex(c => c.Email).IsUnique();
         builder.Property(c => c.Email)
-               .HasMaxLength(255)
+               .HasMaxLength(200)
                .IsRequired();
     }
 }

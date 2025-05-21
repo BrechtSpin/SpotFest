@@ -1,5 +1,4 @@
-﻿using RabbitMQ.Client;
-using System.Threading.RateLimiting;
+﻿using System.Threading.RateLimiting;
 
 namespace DataHarvester.SpotifyWeb;
 

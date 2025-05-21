@@ -26,26 +26,34 @@ public class SpotifyWebApiClientTokenClient
 
     public async Task<SpotifyWebApiClientToken> GetTokenAsync()
     {
-        await _semaphore.WaitAsync();   // only one request to get a new token should be sent
-        if (Token == null || DateTime.UtcNow >= Token.Expires_at)
+        try
         {
-            HttpResponseMessage response = await _httpClient.PostAsync(AuthUri, _content);
-            if (response.StatusCode == HttpStatusCode.OK)
+            await _semaphore.WaitAsync();   // only one request to get a new token should be sent
+            if (Token == null || DateTime.UtcNow >= Token.Expires_at)
             {
-                using StreamReader reader = new(await response.Content.ReadAsStreamAsync());
-                var message = await reader.ReadToEndAsync();
-                Token = JsonSerializer.Deserialize(message, SerializerContext.Default.SpotifyWebApiClientToken)!;
-                Token.Expires_at = DateTime.UtcNow + TimeSpan.FromSeconds(Token.Expires_in - 30);
+                HttpResponseMessage response = await _httpClient.PostAsync(AuthUri, _content);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    using StreamReader reader = new(await response.Content.ReadAsStreamAsync());
+                    var message = await reader.ReadToEndAsync();
+                    Token = JsonSerializer.Deserialize(message, SerializerContext.Default.SpotifyWebApiClientToken)!;
+                    Token.Expires_at = DateTime.UtcNow + TimeSpan.FromSeconds(Token.Expires_in - 30);
+                }
+                else
+                {
+                    //TODO other status-codes see documentation
+                    _logger.LogCritical("");
+                    throw new NotImplementedException();
+                }
             }
-            else
-            {
-                //TODO other status-codes see documentation
-                _logger.LogCritical("");
-                throw new NotImplementedException();
-            }
+            return Token;
+
         }
-        _semaphore.Release();
-        return Token;
+        catch (Exception)
+        {
+            throw;
+        }
+        finally { _semaphore.Release(); }
     }
 
     private StringContent AuthBody()

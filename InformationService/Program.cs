@@ -1,13 +1,20 @@
+using InformationService.Services;
 using InformationService.Data.Repositories;
 using InformationService.Endpoints;
 using Microsoft.EntityFrameworkCore;
+using InformationService.Extension;
 
 var builder = WebApplication.CreateSlimBuilder(args);
-//var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ContactContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+builder.Services.AddEnvironmentSettings();
+builder.Services.AddScoped<IContactServices,ContactServices>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddSingleton<EmailTokenClient>();
+builder.Services.AddEmailRateLimiter();
 
 #if DEBUG
 
@@ -32,7 +39,9 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<ContactContext>();
     db.Database.Migrate();
 }
-app.MapArtistApiEndpoints();
+
+app.UseRateLimiter();
+app.MapContactApiEndpoints();
 
 app.Run();
 
