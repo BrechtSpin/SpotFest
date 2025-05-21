@@ -67,7 +67,14 @@ services:
       - "traefik.http.services.happening.loadbalancer.server.port=8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__DefaultConnection: "Server=spotfest-db;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD}"  
+      ConnectionStrings__DefaultConnection: "Server=spotfest-db;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD}"
+      MAIL_SMTPSERVER: ${MAIL_SMTPSERVER}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_SENDER: ${MAIL_SENDER}
+      MAIL_CLIENT_ID: ${MAIL_CLIENT_ID}
+      MAIL_TENANT_ID: ${MAIL_TENANT_ID}
+      MAIL_SECRET: ${MAIL_SECRET}
+      MAIL_SCOPES: ${MAIL_SCOPES}
       
   happeningservice:
     container_name: happeningservice
