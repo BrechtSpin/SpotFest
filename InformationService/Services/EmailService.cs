@@ -9,15 +9,15 @@ using InformationService.Models;
 namespace InformationService.Services;
 public class EmailService : IEmailService
 {
+    private readonly ILogger<EmailService> _logger;
     private readonly ResiliencePipeline _retryStrategy;
-    private readonly EmailTokenClient _emailtokenClient;
     private readonly EmailSettings _emailSettings;
 
     public EmailService(
-        EmailTokenClient emailTokenClient,
+        ILogger<EmailService> logger,
         EmailSettings emailSettings)
     {
-        _emailtokenClient = emailTokenClient;
+        _logger = logger;
         _emailSettings = emailSettings;
 
         var Retries = new RetryStrategyOptions
@@ -29,6 +29,11 @@ public class EmailService : IEmailService
                 return new ValueTask<TimeSpan?>(BaseDelay * Math.Pow(2, args.AttemptNumber));
             },
             MaxDelay = TimeSpan.FromMinutes(60),
+            OnRetry = args =>
+            {
+                _logger.LogError(args.Outcome.Exception!.Message);
+                return default;
+            }
         };
         _retryStrategy = new ResiliencePipelineBuilder()
             .AddRetry(Retries)
@@ -43,25 +48,26 @@ public class EmailService : IEmailService
         CancellationToken cancellationToken = default)
     {
         var email = new MimeMessage();
-        email.From.Add(MailboxAddress.Parse(_emailSettings.FromAddress));
+        email.From.Add(MailboxAddress.Parse(_emailSettings.SenderEmail));
         email.To.Add(MailboxAddress.Parse(toEmail));
-        if (replyToMail != "") email.ReplyTo.Add(MailboxAddress.Parse(replyToMail));
+        if (replyToMail == "") { replyToMail = _emailSettings.SenderEmail; }
+        email.ReplyTo.Add(MailboxAddress.Parse(replyToMail));
         email.Subject = subject;
         email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = body };
 
 
         await _retryStrategy.ExecuteAsync(async ct =>
         {
-            var token = await _emailtokenClient.GetTokenAsync();
             using var smtp = new SmtpClient();
             await smtp.ConnectAsync(
                 _emailSettings.SmtpServer,
                 _emailSettings.SmtpPort,
-                SecureSocketOptions.StartTls, ct);
+                SecureSocketOptions.StartTls,
+                ct);
             await smtp.AuthenticateAsync(
-                new SaslMechanismOAuth2(
-                    _emailSettings.FromAddress,
-                    token), ct);
+                _emailSettings.SenderEmail,
+                _emailSettings.PassCode,
+                ct);
             await smtp.SendAsync(email, ct);
             await smtp.DisconnectAsync(true, ct);
         }, cancellationToken);

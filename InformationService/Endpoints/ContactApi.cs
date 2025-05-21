@@ -10,13 +10,13 @@ public static class ContactApi
     {
         var group = app.MapGroup("/api/info");
 
-        group.MapPost("contactform", PostContactForm)
+        group.MapPost("/contactform", PostContactForm)
             .RequireRateLimiting("GlobalPolicy")
             .RequireRateLimiting("PerIpPolicy");
 
     }
 
-    private static async Task<IResult> PostContactForm(
+    public static async Task<IResult> PostContactForm(
         IContactServices service,
         ContactFormDTO dto)
     {

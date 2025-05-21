@@ -3,6 +3,7 @@ using InformationService.DTO;
 using InformationService.Models;
 using InformationService.EmailTemplates;
 using System.Net;
+using System.Diagnostics;
 
 namespace InformationService.Services;
 
@@ -23,25 +24,33 @@ public class ContactServices(
             Email = contactFormDTO.Email,
         };
 
-        _contactContext.Contacts.Add(newContact);
-        await _contactContext.SaveChangesAsync();
+        try
+        {
+            _contactContext.Contacts.Add(newContact);
+            await _contactContext.SaveChangesAsync();
 
-        var sanName = WebUtility.HtmlEncode(newContact.Name);
-        var sanEmail = WebUtility.HtmlEncode(newContact.Email);
+            var sanName = WebUtility.HtmlEncode(newContact.Name);
+            var sanEmail = WebUtility.HtmlEncode(newContact.Email);
 
-        var emailBody = EmailTemplate.GitHubLink(
-            sanName,
-            "https://github.com/BrechtSpin/SpotFest",
-            _emailSettings.FromAddress);
+            var emailBody = EmailTemplate.GitHubLink(
+                sanName,
+                "https://github.com/BrechtSpin/SpotFest",
+                _emailSettings.ReplyToEmail);
 
-        await _emailService.SendEmailAsync(
-            sanEmail,
-            "Your Github repository link",
-            emailBody,
-            _emailSettings.FromAddress);
-        await _emailService.SendEmailAsync(
-            _emailSettings.FromAddress,
-            "A Github link was sent",
-            "to sanName sanEmail");
+            await _emailService.SendEmailAsync(
+                sanEmail,
+                "Your Github repository link",
+                emailBody,
+                _emailSettings.ReplyToEmail);
+            await _emailService.SendEmailAsync(
+                _emailSettings.ReplyToEmail,
+                "A Github link was sent",
+                WebUtility.HtmlEncode($"A Github link was sent to {sanName} {sanEmail}"),
+                _emailSettings.ReplyToEmail);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+        }
     }
 }

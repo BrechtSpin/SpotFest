@@ -4,7 +4,7 @@ using InformationService.Endpoints;
 using Microsoft.EntityFrameworkCore;
 using InformationService.Extension;
 
-var builder = WebApplication.CreateSlimBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ContactContext>(options =>
@@ -13,7 +13,6 @@ builder.Services.AddDbContext<ContactContext>(options =>
 builder.Services.AddEnvironmentSettings();
 builder.Services.AddScoped<IContactServices,ContactServices>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddSingleton<EmailTokenClient>();
 builder.Services.AddEmailRateLimiter();
 
 #if DEBUG
