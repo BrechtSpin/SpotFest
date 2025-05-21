@@ -67,13 +67,12 @@ export class TimelineGraphComponent implements AfterViewInit {
               parser: 'iso',      // parse ISO strings
               unit: 'day',        // bucket & tick by day
               displayFormats: {
-                day: 'MMM d, yyyy' // e.g. "May 8, 2025"
+                day: 'd MMM' // e.g. "May 8, 2025"
               },
             },
-            title: { display: true, text: 'Date (by Day)' },
           },
           y: {
-            title: { display: true, text: 'Value' },
+            title: { display: true, text: this.label() },
           },
         },
         responsive: true,

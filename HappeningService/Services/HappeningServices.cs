@@ -21,7 +21,7 @@ public class HappeningServices(HappeningContext happeningContext,
 
         happening = await _happeningContext.Happenings
             .Include(h => h.HappeningArtists)
-            .Where(h => today >= h.StartDate)
+            .Where(h => today <= h.StartDate)
             .OrderBy(h => h.StartDate)
             .FirstOrDefaultAsync();
 

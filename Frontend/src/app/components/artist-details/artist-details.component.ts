@@ -29,7 +29,6 @@ export class ArtistDetailsComponent implements OnInit {
   ngOnInit(): void {
     const artistGuid = this.route.snapshot.paramMap.get('guid');
     const artistName = this.route.snapshot.paramMap.get('name');
-    //if (artistGuid === null) { this.router.navigate(['/not-found']); }
     if (artistGuid === null) { return }
 
 

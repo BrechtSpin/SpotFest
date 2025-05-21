@@ -9,7 +9,9 @@ export class happeningHub {
   private readonly hubUrl = `${environment.apiHappeningUrl}/currenthub`;
 
   async startConnection(): Promise<void> {
-    if (this.hub && this.hub.state !== HubConnectionState.Disconnected) {
+    if (this.hub
+      && this.hub.state !== HubConnectionState.Disconnected
+      && this.hub.state !== HubConnectionState.Connecting) {
       return;
     }
 
