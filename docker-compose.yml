@@ -71,10 +71,8 @@ services:
       MAIL_SMTPSERVER: ${MAIL_SMTPSERVER}
       MAIL_PORT: ${MAIL_PORT}
       MAIL_SENDER: ${MAIL_SENDER}
-      MAIL_CLIENT_ID: ${MAIL_CLIENT_ID}
-      MAIL_TENANT_ID: ${MAIL_TENANT_ID}
-      MAIL_SECRET: ${MAIL_SECRET}
-      MAIL_SCOPES: ${MAIL_SCOPES}
+      MAIL_PASSCODE: ${MAIL_PASSCODE}
+      MAIL_REPLYTO: ${MAIL_REPLYTO}
 
   happeningservice:
     container_name: happeningservice
