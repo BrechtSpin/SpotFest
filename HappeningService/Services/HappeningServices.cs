@@ -5,6 +5,7 @@ using HappeningService.DTO;
 using HappeningService.Messaging;
 using HappeningService.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace HappeningService.Services;
 
@@ -25,11 +26,14 @@ public class HappeningServices(HappeningContext happeningContext,
             .OrderBy(h => h.StartDate)
             .FirstOrDefaultAsync();
 
-        if(happening == null) { happening = await _happeningContext.Happenings
+        if (happening == null)
+        {
+            happening = await _happeningContext.Happenings
             .Include(h => h.HappeningArtists)
             .OrderBy(h => h.StartDate)
-            .FirstOrDefaultAsync();}
-        if(happening == null) return null;
+            .FirstOrDefaultAsync();
+        }
+        if (happening == null) return null;
 
         return await GetHappeningFullByHappening(happening);
     }
@@ -96,5 +100,24 @@ public class HappeningServices(HappeningContext happeningContext,
 
         _happeningContext.HappeningArtists.Add(NewHA);
         await _happeningContext.SaveChangesAsync();
+    }
+    public async Task<HappeningSummaryDTO[]> GetHappeningsOfArtistAsync(string artistGuid)
+    {
+        Guid guid = Guid.Parse(artistGuid);
+
+        var happeningArtists = await _happeningContext.HappeningArtists
+            .Where(ha => ha.ArtistGuid == guid)
+            .Include(ha => ha.Happening)
+            .ToArrayAsync();
+
+        return Array.ConvertAll(
+            happeningArtists,
+            a => new HappeningSummaryDTO
+            {                
+                Name = a.Happening.Name,
+                Slug = a.Happening.Slug,
+                StartDate = a.Happening.StartDate,
+                EndDate = a.Happening.EndDate,
+            });
     }
 }

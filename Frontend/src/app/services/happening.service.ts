@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
 import { CreateHappening } from '@models/create-happening';
 import { HappeningFull } from '@models/happening-full';
+import { HappeningSummary } from '@models/happening-summary';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,10 @@ export class HappeningService {
 
   createHappening(createHappening: CreateHappening): Observable<{ slug: string }> {
     return this.http.post<{ slug: string }>(`${this.Url}/new`, createHappening);
+  }
+
+  getHappeningsOfArtist(guid: string): Observable<HappeningSummary[]> {
+    return this.http.get<HappeningSummary[]>(`${this.Url}/artist/${guid}`)
   }
 
   //deprecated

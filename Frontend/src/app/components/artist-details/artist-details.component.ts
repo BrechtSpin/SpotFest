@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, resource, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router'
 
 import { TimelineGraphComponent } from '@components/graph/graph.component';
 import { ArtistService } from '@services/artist.service';
+import { HappeningService } from '@services/happening.service';
 import { ArtistWithMetrics } from '@models/artist-with-metrics';
-import { ArtistMetric } from '@models/artist-metric';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { firstValueFrom, map, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-artist-details',
@@ -14,56 +16,74 @@ import { ArtistMetric } from '@models/artist-metric';
   templateUrl: './artist-details.component.html',
   styleUrl: './artist-details.component.css',
 })
-export class ArtistDetailsComponent implements OnInit {
-  artistName = '';
-  artistPicture = '';
-  metrics: ArtistMetric[] = [];
-  dataSets: { label: string; data: { date: string; value: number }[] }[] = [];
+export class ArtistDetailsComponent {
+  happeningService = inject(HappeningService);
+  artistService = inject(ArtistService);
+  route = inject(ActivatedRoute);
+  router = inject(ActivatedRoute);
 
-  constructor(
-    private artistService: ArtistService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) { }
+  artistRouteGuid: Signal<string | null> = toSignal(
+    this.route.paramMap.pipe(
+      map(params => params.get('guid'))
+    ),
+    { initialValue: null }
+  );
+  artistRouteName: Signal<string | null> = toSignal(
+    this.route.paramMap.pipe(
+      map(params => params.get('name'))
+    ),
+    { initialValue: null }
+  );
 
-  ngOnInit(): void {
-    const artistGuid = this.route.snapshot.paramMap.get('guid');
-    const artistName = this.route.snapshot.paramMap.get('name');
-    if (artistGuid === null) { return }
+  artistResource = resource<ArtistWithMetrics | null, string | null>({
+    request: () => this.artistRouteGuid(),
+    loader: async ({ request }) => {
+      if (!request) {
+        return null;
+      }
+      const [artist, happenings] = await Promise.all([
+        firstValueFrom(
+          this.artistService.getArtistWithMetricsByGuid(request, this.artistRouteName() ?? '')
+        ),
+        firstValueFrom(
+          this.happeningService.getHappeningsOfArtist(request)
+        )
+      ]);
+      return { ...artist, artistHappenings: happenings };
+    },
+    defaultValue: null,
+  });
 
+  artist = computed(() => this.artistResource.value());
 
-    this.artistService.getArtistWithMetricsByGuid(artistGuid, artistName).subscribe({
-      next: (res: ArtistWithMetrics) => {
-        this.artistName = res.name;
-        this.artistPicture = res.pictureMediumUrl;
-        this.metrics = res.artistMetrics;
-
-        this.dataSets = [
-          {
-            label: 'Followers',
-            data: this.metrics.map(m => ({
-              date: m.date,
-              value: m.followers
-            }))
-          },
-          {
-            label: 'Popularity',
-            data: this.metrics.map(m => ({
-              date: m.date,
-              value: m.popularity
-            }))
-          },
-          {
-            label: 'Listeners',
-            data: this.metrics.map(m => ({
-              date: m.date,
-              value: m.listeners
-            }))
-          }
-        ];
+  dataSets = computed(() => {
+    const artist = this.artist();
+    if (!artist) { return [] }
+    return [
+      {
+        label: 'Followers',
+        metrics: artist.artistMetrics.map(m => ({
+          date: m.date,
+          value: m.followers
+        })),
+        happenings: artist.artistHappenings
       },
-      error: err =>
-        console.error('Fout bij ophalen artiest-metrics', err)
-    });
-  }
+      {
+        label: 'Popularity',
+        metrics: artist.artistMetrics.map(m => ({
+          date: m.date,
+          value: m.popularity
+        })),
+        happenings: artist.artistHappenings
+      },
+      {
+        label: 'Listeners',
+        metrics: artist.artistMetrics.map(m => ({
+          date: m.date,
+          value: m.listeners
+        })),
+        happenings: artist.artistHappenings
+      }
+    ];
+  })
 }

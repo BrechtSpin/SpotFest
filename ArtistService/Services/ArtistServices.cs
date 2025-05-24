@@ -70,7 +70,7 @@ public class ArtistServices(ArtistServiceContext context, IPublisherService publ
         if (artistWithMetrics == null) return null;
         return new ArtistWithMetricsDTO
         {
-            Guid = guid,
+            ArtistGuid = guid,
             Name = artistWithMetrics.Name,
             PictureMediumUrl = artistWithMetrics.PictureMediumUrl,
             ArtistMetrics = artistWithMetrics.Metrics
