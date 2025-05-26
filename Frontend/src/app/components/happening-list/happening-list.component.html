@@ -1,0 +1,35 @@
+<div class="mb-3">
+  <label for="monthPicker" class="form-label">Select month:</label>
+  <input type="month"
+         id="monthPicker"
+         class="form-control w-auto"
+         [ngModel]="dateInput()"
+         (ngModelChange)="selectMonthDate($event)" />
+</div>
+
+<ul class="list-group happening-list mb-4">
+  @for(happening of happenings(); track happening){
+  <li class="list-group-item d-flex align-items-center">
+    <a class="d-flex align-items-center text-decoration-none flex-grow-1"
+       [routerLink]="['/happening', happening.slug]">
+      <div class="me-3">{{ happening.startDate | date: 'MMM d, y' }}</div>
+      <span class="fw-medium text-dark">{{ happening.name }}</span>
+    </a>
+  </li>
+  }
+</ul>
+
+<nav aria-label="Happening list pagination">
+  <ul class="pagination justify-content-center">
+    <li class="page-item" [class.disabled]="index() === 0">
+      <button class="page-link" (click)="prevPage()" [disabled]="index() === 0">
+        Previous
+      </button>
+    </li>
+    <li class="page-item" [class.disabled]="!isNextPage()">
+      <button class="page-link" (click)="nextPage()" [disabled]="!isNextPage()">
+        Next
+      </button>
+    </li>
+  </ul>
+</nav>

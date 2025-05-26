@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '@env/environment';
@@ -33,8 +33,11 @@ export class HappeningService {
     return this.http.get<HappeningSummary[]>(`${this.Url}/artist/${guid}`)
   }
 
-  //deprecated
-  //getCurrentAndUpcomingHappenings(): Observable<HappeningSummary[]> {
-  //  return this.http.get<HappeningSummary[]>(`${this.Url}/current`)
-  //}
+  getHappeningsByYearMonth(year:number, month:number, index:number): Observable<HappeningSummary[]> {
+    let params = new HttpParams()
+      .set('year', year.toString())
+      .set('month', month.toString())
+      .set('index', index.toString());
+    return this.http.get<HappeningSummary[]>(`${this.Url}/s`, { params });
+  }
 }

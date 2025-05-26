@@ -64,19 +64,13 @@ export class ArtistListComponent {
     defaultValue: [] as ArtistSummary[],
   })
 
+  artists = computed<ArtistSummary[]>(() => this.artistsResource.value());
 
-  artists = computed<ArtistSummary[]>(() => {
-    const val = this.artistsResource.value();
-    return val;
-  })
-
+  isNextPage = computed(() => this.artistsResource.value.length === this.itemsPerPage)
   selectLetter(letter: string) {
     this.query.set(letter);
     this.index.set(0);
   }
-
-  isNextPage = computed(() => this.artistsResource.value.length === this.itemsPerPage)
-
   nextPage() {
     this.index.set(this.index() + this.itemsPerPage)
   }

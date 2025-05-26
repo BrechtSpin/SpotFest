@@ -120,4 +120,26 @@ public class HappeningServices(HappeningContext happeningContext,
                 EndDate = a.Happening.EndDate,
             });
     }
+
+    public async Task<HappeningSummaryDTO[]> GetHappeningsSearch(int year, int month, int index)
+    {
+        var start = new DateOnly(year, month, 1);
+        var end = start.AddMonths(1);
+        var happenings = await _happeningContext.Happenings
+            .OrderBy(h => h.StartDate)
+            .Where(h => h.StartDate >= start && h.StartDate < end)            
+            .Skip(index)
+            .Take(10)
+            .ToArrayAsync();
+        return Array.ConvertAll(
+            happenings,
+            h => new HappeningSummaryDTO
+            {
+                Name = h.Name,
+                Slug = h.Slug,
+                StartDate = h.StartDate,
+                EndDate = h.EndDate,
+            });
+            
+    }
 }

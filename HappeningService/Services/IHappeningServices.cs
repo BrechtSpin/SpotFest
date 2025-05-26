@@ -9,4 +9,5 @@ public interface IHappeningServices
     public Task<string> CreateHappeningAsync(CreateHappeningDTO createHappeningDTO);
     public Task CreateHappeningArtistAsync(HappeningArtistComplete happeningArtist);
     public Task<HappeningSummaryDTO[]> GetHappeningsOfArtistAsync(string ArtistGuid);
+    public Task<HappeningSummaryDTO[]> GetHappeningsSearch(int year, int month, int index);
 }

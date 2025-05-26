@@ -1,6 +1,7 @@
 ﻿using HappeningService.DTO;
 using HappeningService.Services;
 using HappeningService.Services.Hubs;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace HappeningService.EndPoints;
@@ -13,6 +14,7 @@ public static class HappeningApi
 
         group.MapPost("/new", CreateHappening);
         group.MapGet("", GetHappeningFullNoSlug);
+        group.MapGet("/s", GetHappeningsSearch);
         group.MapGet("/{slug}", GetHappeningFull);
         group.MapGet("/artist/{guid}", GetHappeningsOfArtist);
         //group.MapGet("/current", GetHappeningsCurrentTimeframe);
@@ -52,10 +54,13 @@ public static class HappeningApi
         var happeningsOfArtist = await service.GetHappeningsOfArtistAsync(guid);
         return Results.Ok(happeningsOfArtist);
     }
-    // deprecated
-    //private static async Task<IResult> GetHappeningsCurrentTimeframe(IHappeningServices service)
-    //{
-    //    var happeningsSummary = await service.GetHappeningsCurrentTimeframeAsync();
-    //    return Results.Ok(happeningsSummary);
-    //}
+    private static async Task<IResult> GetHappeningsSearch(
+        [FromServices] IHappeningServices services,
+       [FromQuery(Name = "year")] int year,
+       [FromQuery(Name = "month")] int month,
+       [FromQuery(Name = "index")] int index)
+    {
+        var happenings = await services.GetHappeningsSearch(year, month, index);
+        return Results.Ok(happenings);
+    }
 }
