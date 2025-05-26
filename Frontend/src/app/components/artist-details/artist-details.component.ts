@@ -61,6 +61,14 @@ export class ArtistDetailsComponent {
     if (!artist) { return [] }
     return [
       {
+        label: 'Listeners',
+        metrics: artist.artistMetrics.map(m => ({
+          date: m.date,
+          value: m.listeners
+        })),
+        happenings: artist.artistHappenings
+      },
+      {
         label: 'Followers',
         metrics: artist.artistMetrics.map(m => ({
           date: m.date,
@@ -73,14 +81,6 @@ export class ArtistDetailsComponent {
         metrics: artist.artistMetrics.map(m => ({
           date: m.date,
           value: m.popularity
-        })),
-        happenings: artist.artistHappenings
-      },
-      {
-        label: 'Listeners',
-        metrics: artist.artistMetrics.map(m => ({
-          date: m.date,
-          value: m.listeners
         })),
         happenings: artist.artistHappenings
       }
