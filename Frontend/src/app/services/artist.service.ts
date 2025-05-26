@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 
 import { environment } from '@env/environment';
+import { ArtistSummary } from '@models/artist-summary';
 import { ArtistWithMetrics } from '@models/artist-with-metrics';
 
 @Injectable({
@@ -25,7 +25,13 @@ export class ArtistService {
 
   getArtistByNameSpotify(searchterm: string): Observable<any> {
     return this.http.get(`${this.SearchUrl}/search`, { params: { name: searchterm } })
-    //return this.http.get(`artist/search`, { params: { name: searchterm }})
+  }
+
+  GetArtistsBySearch(query: string, first: number): Observable<ArtistSummary[]> {
+    let params = new HttpParams()
+      .set('query', query)
+      .set('index', first.toString());
+    return this.http.get<ArtistSummary[]>(`${this.Url}/s`, { params });
   }
 
   handleError<T>(operation = 'operation', result?: T) {

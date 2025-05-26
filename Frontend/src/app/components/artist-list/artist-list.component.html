@@ -1,0 +1,42 @@
+<nav class="nav nav-pills mb-3">
+  @for (letter of alphabet; track letter) {
+  <button class="nav-link px-2"
+          [class.active]="query() === letter"
+          (click)="selectLetter(letter)">
+    {{ letter }}
+  </button>
+  }
+</nav>
+
+
+<ul class="list-group artist-list mb-4">
+  @for (artist of artists(); track artist) {
+  <li class="list-group-item d-flex align-items-center">
+    <a class="d-flex align-items-center text-decoration-none flex-grow-1"
+       [routerLink]="['/artist', artist.guid]">
+      <img src="{{ artist.pictureSmallUrl }}"
+           alt="{{ artist.name }}"
+           width="50"
+           height="50"
+           class="rounded me-3" />
+      <span class="fw-medium text-dark">{{ artist.name }}</span>
+    </a>
+  </li>
+  }
+</ul>
+
+
+<nav aria-label="Artist list pagination">
+  <ul class="pagination justify-content-center">
+    <li class="page-item {{ index() === 0 ? 'disabled' : '' }}">
+      <button class="page-link" (click)="prevPage()" [disabled]="index() === 0">
+        Previous
+      </button>
+    </li>
+    <li class="page-item {{ !isNextPage() ? 'disabled' : '' }}">
+      <button class="page-link" (click)="nextPage()" [disabled]="!isNextPage()">
+        Next
+      </button>
+    </li>
+  </ul>
+</nav>

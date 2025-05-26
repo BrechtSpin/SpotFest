@@ -10,6 +10,7 @@ public interface IArtistServices
     public Task ArtistMetricDataJob(SchedulerJob Job);
     public Task<ArtistSummary[]> ArtistSummariesFromGuids(Guid[] guids);
     public Task<ArtistWithMetricsDTO?> GetArtistWithMetrics(Guid guid);
+    public Task<ArtistSummary[]> GetArtistsSearch(string query, int index);
 
 
 }

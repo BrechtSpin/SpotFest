@@ -52,6 +52,28 @@ public class ArtistServices(ArtistServiceContext context, IPublisherService publ
         var artists = await _context.Artists
             .Where(a => guids.Contains(a.Guid))
             .ToArrayAsync();
+
+        return Array.ConvertAll(
+            artists,
+            a => new ArtistSummary
+            {
+                Guid = a.Guid,
+                Name = a.Name,
+                PictureSmallUrl = a.PictureSmallUrl,
+            });
+    }
+
+    public async Task<ArtistSummary[]> GetArtistsSearch(string query, int index)
+    {
+        if (query == null || query =="" || index < 0) return [];
+
+        var artists = await _context.Artists
+            .OrderBy(a => a.Name)
+            .Where(a => a.Name.StartsWith(query))
+            .Skip(index)
+            .Take(10)
+            .ToArrayAsync();
+
         return Array.ConvertAll(
             artists,
             a => new ArtistSummary
