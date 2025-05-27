@@ -19,13 +19,6 @@ builder.Services.AddDbContext<ArtistServiceContext>(options =>
 builder.Services.AddMassTransitConfiguration(builder.Configuration);
 builder.Services.AddScoped<IPublisherService, PublisherService>();
 
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders =
-    ForwardedHeaders.XForwardedFor |            // original IP forwarded
-    ForwardedHeaders.XForwardedProto;           // original security scheme forwarded
-});
-
 #if DEBUG
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -55,7 +48,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-app.UseForwardedHeaders();
 app.MapArtistApiEndpoints();
 
 app.Run();
