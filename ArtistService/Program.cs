@@ -3,6 +3,7 @@ using ArtistService.Messaging;
 using ArtistService.Services;
 using ArtistService.EndPoints;
 using ArtistService.Data.Repositories;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,13 @@ builder.Services.AddDbContext<ArtistServiceContext>(options =>
 
 builder.Services.AddMassTransitConfiguration(builder.Configuration);
 builder.Services.AddScoped<IPublisherService, PublisherService>();
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+    ForwardedHeaders.XForwardedFor |            // original IP forwarded
+    ForwardedHeaders.XForwardedProto;           // original security scheme forwarded
+});
 
 #if DEBUG
 builder.Services.AddEndpointsApiExplorer();
