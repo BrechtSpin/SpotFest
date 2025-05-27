@@ -3,6 +3,7 @@ using ArtistService.Messaging;
 using ArtistService.Services;
 using ArtistService.EndPoints;
 using ArtistService.Data.Repositories;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +48,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-
 app.MapArtistApiEndpoints();
 
 app.Run();

@@ -33,17 +33,6 @@ public static class ArtistApi
     {
         var artistWithMetrics = await services.GetArtistWithMetrics(guid);
         if (artistWithMetrics == null) return Results.NotFound();
-
-        if (!string.Equals(artistWithMetrics.Name, name, StringComparison.OrdinalIgnoreCase))
-        {
-            return Results.RedirectToRoute(
-                routeName: "GetArtist",
-                routeValues: new
-                {
-                    guid,
-                    name = artistWithMetrics.Name
-                });
-        }
         return Results.Ok(artistWithMetrics);
     }
 }

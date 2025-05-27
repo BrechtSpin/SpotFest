@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, resource, Signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, resource, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router'
 
@@ -8,6 +8,7 @@ import { HappeningService } from '@services/happening.service';
 import { ArtistWithMetrics } from '@models/artist-with-metrics';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { firstValueFrom, map, Observable, of } from 'rxjs';
+import slugify from 'slugify';
 
 @Component({
   selector: 'app-artist-details',
@@ -20,7 +21,7 @@ export class ArtistDetailsComponent {
   happeningService = inject(HappeningService);
   artistService = inject(ArtistService);
   route = inject(ActivatedRoute);
-  router = inject(ActivatedRoute);
+  router = inject(Router);
 
   artistRouteGuid: Signal<string | null> = toSignal(
     this.route.paramMap.pipe(
@@ -85,5 +86,20 @@ export class ArtistDetailsComponent {
         happenings: artist.artistHappenings
       }
     ];
+  })
+
+  fixUrl = effect(() => {
+    const artist = this.artistResource.value();
+    const guid = this.artistRouteGuid();
+    if (artist && guid) {
+      const name = this.artistRouteName();
+      const slug = slugify(artist.name, { strict: true, remove: /[*+~.()'"!?:@]/g } )
+      if (name !== slug) {
+        this.router.navigate(
+          ['/artist', guid, slug],
+          { replaceUrl: true }
+        );
+      }
+    }
   })
 }
