@@ -23,12 +23,12 @@ public class SpotifyWebApiClient : ISpotifyWebApiClient
 
     public SpotifyWebApiClient(
         HttpClient httpclient,
-        SpotifyRateLimiter spotifyRateLimiter,
-        SpotifyWebApiClientTokenClient spotifyWebApiClientTokenClient)
+        SpotifyWebApiClientTokenClient spotifyWebApiClientTokenClient,
+        SpotifyRateLimiter spotifyRateLimiter)
     {
         _httpClient = httpclient;
-        _rateLimiter = spotifyRateLimiter.GetSlidingWindowRateLimiter();
         _tokenClient = spotifyWebApiClientTokenClient;
+        _rateLimiter = spotifyRateLimiter.GetSlidingWindowRateLimiter();
         _pipeline = new ResiliencePipelineBuilder<HttpResponseMessage>()
             .AddRetry(new()
             {
@@ -69,6 +69,10 @@ public class SpotifyWebApiClient : ISpotifyWebApiClient
             case HttpStatusCode.BadRequest:
                 {
                     throw new ArgumentException($"invalid Uri {requestUri}", nameof(requestUri));
+                }
+            case HttpStatusCode.NotFound:
+                {
+                    throw new KeyNotFoundException($"item not found {requestUri}");
                 }
             default:
                 throw new NotImplementedException(response.StatusCode.ToString());

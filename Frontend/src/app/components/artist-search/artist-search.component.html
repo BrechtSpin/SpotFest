@@ -8,7 +8,7 @@
 
 @if (artists().length > 0) {
 <ul class="list-group">
-  @for (artist of artists(); track artist.name) {
+  @for (artist of artists(); track artist.spotifyId) {
   <li class="list-group-item"
       (click)="selectArtist(artist)"
       [style.cursor]="'pointer'"
