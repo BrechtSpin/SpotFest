@@ -66,7 +66,8 @@ export class ArtistListComponent {
 
   artists = computed<ArtistSummary[]>(() => this.artistsResource.value());
 
-  isNextPage = computed(() => this.artistsResource.value.length === this.itemsPerPage)
+  isNextPage = computed(() => this.artistsResource.value().length === this.itemsPerPage)
+
   selectLetter(letter: string) {
     this.query.set(letter);
     this.index.set(0);
