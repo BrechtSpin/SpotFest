@@ -47,6 +47,11 @@ public class HappeningsCurrentTimeframeService(
 
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
+        var LastHappenings = _happeningContext.Happenings
+            .Where(x => x.EndDate < today)
+            .OrderByDescending(x => x.EndDate)
+            .Take(3);
+
         var CurrentHappenings = _happeningContext.Happenings
             .Where(x => x.StartDate <= today && x.EndDate >= today)
             .OrderBy(x => x.StartDate);
@@ -56,7 +61,9 @@ public class HappeningsCurrentTimeframeService(
             .OrderBy(x => x.StartDate)
             .Take(5);
 
-        return CurrentHappenings.Concat(UpcomingHappenings)
+        return LastHappenings
+            .Concat(CurrentHappenings)
+            .Concat(UpcomingHappenings)
             .Select(h => new HappeningSummaryDTO
             {
                 Name = h.Name,

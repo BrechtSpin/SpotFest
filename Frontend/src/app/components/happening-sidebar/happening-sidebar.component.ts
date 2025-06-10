@@ -24,8 +24,11 @@ export class HappeningSidebarComponent implements OnInit {
     defaultValue: [] as HappeningSummary[],
   });
 
+  pastHappenings = computed(() =>
+    this.happeningResource.value().filter(h => new Date(h.endDate) < new Date())
+  );
   currentHappenings = computed(() =>
-    this.happeningResource.value().filter(h => new Date(h.startDate) <= new Date())
+    this.happeningResource.value().filter(h => new Date(h.startDate) <= new Date() && new Date(h.endDate) > new Date())
   );
   futureHappenings = computed(() =>
     this.happeningResource.value().filter(h => new Date(h.startDate) > new Date())

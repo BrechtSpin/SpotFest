@@ -12,6 +12,24 @@
 
   @if (!loading()) {
   <div>
+    @if (pastHappenings().length > 0){
+    <div>
+      <h6>Wrapped Up Happenings</h6>
+      <div class="list-group">
+        @for(happening of pastHappenings(); track happening.slug){
+        <a [routerLink]="['/happening', happening.slug]"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }"
+           class="list-group-item list-group-item-action event-hover">
+          {{ happening.name }}<br>
+          <small>{{ happening.startDate| date:'dd-MM-yyyy'}} to {{happening.endDate| date:'dd-MM-yyyy'}}</small>
+        </a>
+        }
+      </div>
+    </div>
+    }
+    <br />
+
     @if (currentHappenings().length > 0) {
     <div>
       <h6>Ongoing Happenings </h6>
@@ -29,6 +47,7 @@
     </div>
     }
     <br />
+
     @if (futureHappenings().length > 0) {
     <div>
       <h6>Upcoming Happenings </h6>
