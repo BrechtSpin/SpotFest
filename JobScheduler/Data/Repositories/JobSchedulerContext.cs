@@ -1,10 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using JobScheduler.Models;
+using System.Diagnostics.CodeAnalysis;
 namespace JobScheduler.Data.Repositories;
 
-public class JobSchedulerContext(DbContextOptions<JobSchedulerContext> options) : DbContext(options)
+public class JobSchedulerContext : DbContext
 {
-    public required DbSet<JobSchedulerLog> SchedulerLogs { get; set; }
+    [SetsRequiredMembers]
+    public JobSchedulerContext(DbContextOptions<JobSchedulerContext> options) : base(options)
+    {
+        SchedulerLogs = Set<JobSchedulerLog>();
+    }
+
+    public required DbSet<JobSchedulerLog> SchedulerLogs { get; set; } 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

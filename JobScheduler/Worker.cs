@@ -48,17 +48,17 @@ public class JobSchedulerWorker(
             , DateTimeOffset.UtcNow
             , _projectName);
     }
-    private async Task CreateTask(DateTime now)
+    public async Task CreateTask(DateTime now)
     {
         using var scope = _scopeFactory.CreateScope();
         var schedulerContext = scope.ServiceProvider.GetService<JobSchedulerContext>();
         var publisherService = scope.ServiceProvider.GetService<IPublisherService>();
 
-        var PreviousTaskDate  = schedulerContext!.SchedulerLogs
+        var LastTaskDate  = schedulerContext!.SchedulerLogs
             .OrderByDescending(l => l.JobDate)
            .FirstOrDefault();
 
-        if (PreviousTaskDate is null || PreviousTaskDate.JobDate.Date < now.Date)
+        if (LastTaskDate is null || LastTaskDate.JobDate.Date < now.Date)
         {
             var schedulerJob = new SchedulerJob { JobDate = now, Type = "artistmetric", Mode = "all" };
             await publisherService!.ArtistMetricDataTaskPublisher(schedulerJob);
