@@ -49,7 +49,7 @@ public class HappeningsCurrentTimeframeService(
 
         var LastHappenings = _happeningContext.Happenings
             .Where(x => x.EndDate < today)
-            .OrderByDescending(x => x.EndDate)
+            .OrderBy(x => x.EndDate)
             .Take(3);
 
         var CurrentHappenings = _happeningContext.Happenings
