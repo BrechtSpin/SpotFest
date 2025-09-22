@@ -1,19 +1,20 @@
-# Use the official .NET SDK image for building the application
+# build
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-dataharvester
-WORKDIR /app
+WORKDIR /src
 
 COPY DataHarvester/DataHarvester.csproj DataHarvester/
+RUN dotnet restore DataHarvester/DataHarvester.csproj
+
 COPY Contracts/Contracts.csproj Contracts/
 
-RUN dotnet restore DataHarvester/DataHarvester.csproj
-COPY . ./
-RUN dotnet publish -c Release -o out
+COPY . .
+RUN dotnet publish DataHarvester/DataHarvester.csproj -c Release -o out /app/out/DataHarvester
 
-# Use the runtime image to run the application
+# runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime-dataharvester
 WORKDIR /app
-COPY --from=build-dataharvester /app/out ./
+COPY --from=build-dataharvester /app/out/HappeningService ./
 
-# Expose the port and define the entry point
-EXPOSE 80 5672
+# Expose port
+EXPOSE 80
 ENTRYPOINT ["dotnet", "DataHarvester.dll"]

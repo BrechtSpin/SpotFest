@@ -1,19 +1,20 @@
-# Use the official .NET SDK image for building the application
+# build
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-jobscheduler
-WORKDIR /app
+WORKDIR /src
 
 COPY JobScheduler/JobScheduler.csproj JobScheduler/
+RUN dotnet restore JobScheduler/JobScheduler.csproj
+
 COPY Contracts/Contracts.csproj Contracts/
 
-RUN dotnet restore JobScheduler/JobScheduler.csproj
-COPY . ./
-RUN dotnet publish -c Release -o out
+COPY . .
+RUN dotnet publish JobScheduler/JobScheduler.csproj -c Release -o /app/out/JobScheduler
 
-# Use the runtime image to run the application
+# runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime-jobscheduler
 WORKDIR /app
-COPY --from=build-jobscheduler /app/out ./
+COPY --from=build-jobscheduler /app/out/JobScheduler ./
 
-# Expose the port and define the entry point
-EXPOSE 80 5672
+# Expose port
+EXPOSE 80
 ENTRYPOINT ["dotnet", "JobScheduler.dll"]

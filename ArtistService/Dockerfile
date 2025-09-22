@@ -1,19 +1,20 @@
-# Use .NET SDK image for building the application
+# build
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-artistservice
-WORKDIR /app
+WORKDIR /src
 
 COPY ArtistService/ArtistService.csproj ArtistService/
+RUN dotnet restore ArtistService/ArtistService.csproj
+
 COPY Contracts/Contracts.csproj Contracts/
 
-RUN dotnet restore ArtistService/ArtistService.csproj
-COPY . ./
-RUN dotnet publish -c Release -o out
+COPY . .
+RUN dotnet publish ArtistService/ArtistService.csproj -c Release -o out /app/out/ArtistService
 
-# Use the runtime image to run the application
+# runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime-artistservice
 WORKDIR /app
-COPY --from=build-artistservice /app/out ./
+COPY --from=build-artistservice /app/out/HappeningService ./
 
-# Expose the port and define the entry point
-EXPOSE 80 5672
+# Expose port
+EXPOSE 80
 ENTRYPOINT ["dotnet", "ArtistService.dll"]
