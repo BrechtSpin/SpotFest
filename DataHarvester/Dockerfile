@@ -8,7 +8,7 @@ RUN dotnet restore DataHarvester/DataHarvester.csproj
 COPY Contracts/Contracts.csproj Contracts/
 
 COPY . .
-RUN dotnet publish DataHarvester/DataHarvester.csproj -c Release -o out /app/out/DataHarvester
+RUN dotnet publish DataHarvester/DataHarvester.csproj -c Release -o /app/out/DataHarvester
 
 # runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime-dataharvester

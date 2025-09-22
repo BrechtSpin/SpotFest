@@ -8,7 +8,7 @@ RUN dotnet restore ArtistService/ArtistService.csproj
 COPY Contracts/Contracts.csproj Contracts/
 
 COPY . .
-RUN dotnet publish ArtistService/ArtistService.csproj -c Release -o out /app/out/ArtistService
+RUN dotnet publish ArtistService/ArtistService.csproj -c Release -o /app/out/ArtistService
 
 # runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime-artistservice
