@@ -13,7 +13,7 @@ RUN dotnet publish DataHarvester/DataHarvester.csproj -c Release -o /app/out/Dat
 # runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime-dataharvester
 WORKDIR /app
-COPY --from=build-dataharvester /app/out/HappeningService ./
+COPY --from=build-dataharvester /app/out/DataHarvester ./
 
 # Expose port
 EXPOSE 80
