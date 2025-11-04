@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { HappeningDetailComponent } from'@components/happening-detail/happening-detail.component'
+import { Component} from '@angular/core';
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [HappeningDetailComponent],
   templateUrl: './homepage.component.html',
 })
 
