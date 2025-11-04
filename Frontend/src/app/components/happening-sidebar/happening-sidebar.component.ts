@@ -9,8 +9,7 @@ import { NotFound404Component } from '@components/404/404-not-found';
   selector: 'app-happening-sidebar',
   standalone: true,
   imports: [CommonModule, RouterModule, NotFound404Component ],
-  templateUrl: './happening-sidebar.component.html',
-  styleUrls: ['./happening-sidebar.component.css'],
+  templateUrl: './happening-sidebar.component.html'
 })
 export class HappeningSidebarComponent implements OnInit {
   private hub = inject(happeningHub);
