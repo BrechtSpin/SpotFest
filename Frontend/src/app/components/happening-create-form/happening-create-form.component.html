@@ -37,7 +37,7 @@
 
   <div formArrayName="happeningArtists" class="mb-3">
     <h5>Artists</h5>
-    @for (artistCtrl of happeningArtists.controls; let i = $index; track i) {
+    @for (artistCtrl of happeningArtists.controls; let i = $index; track artistCtrl) {
     <div [formGroupName]="i" class="mb-2">
       @if (happeningArtists.at(i).get('spotifyId')?.invalid
       && happeningArtists.at(i).get('spotifyId')?.touched){
@@ -60,3 +60,5 @@
     Create happening
   </button>
 </form>
+
+<div class="bottom-spacer" style="height: 120px"></div>
