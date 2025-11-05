@@ -26,7 +26,7 @@ export class ContactFormComponent {
     return ctrl.invalid && (ctrl.touched || this.submitted);
   }
 
-  submit(): void {
+  onSubmit(): void {
     this.submitted = true;
 
     if (this.contactForm.invalid) {
