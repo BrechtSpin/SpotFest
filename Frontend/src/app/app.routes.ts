@@ -6,6 +6,7 @@ import { HappeningListComponent } from '@components/happening-list/happening-lis
 import { HappeningCreateFormComponent } from '@components/happening-create-form/happening-create-form.component';
 import { HappeningDetailComponent } from '@components/happening-detail/happening-detail.component';
 import { ContactFormComponent } from '@components/contact-form/contact-form.component';
+import { LoginComponent } from '@components/auth-loginform/auth-loginform.component'
 import { NotFound404Component } from '@components/404/404-not-found';
 
 export const routes: Routes = [
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'happening/add', component: HappeningCreateFormComponent },
   { path: 'happening/:slug', component: HappeningDetailComponent },
   { path: 'contact', component: ContactFormComponent },
+  { path: 'account/login', component: LoginComponent},
   { path: '404', component: NotFound404Component },
   { path: '**', redirectTo: '' }  //falback
 ];
