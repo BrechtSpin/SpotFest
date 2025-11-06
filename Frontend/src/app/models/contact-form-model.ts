@@ -1,4 +1,4 @@
 export interface ContactFormModel {
-  name: string
-  email: string
+  name: string;
+  email: string;
 }
