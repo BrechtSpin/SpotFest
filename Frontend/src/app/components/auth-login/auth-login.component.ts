@@ -5,10 +5,10 @@ import { AuthService } from '@services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'auth-loginform',
+  selector: 'auth-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './auth-loginform.component.html'
+  templateUrl: './auth-login.component.html'
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
