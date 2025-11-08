@@ -1,0 +1,86 @@
+<div class="container d-flex justify-content-center align-items-center mt-5">
+  <div class="card shadow-lg p-4" style="width: 400px;">
+
+    <h3 class="text-center mb-4">Make a new account</h3>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+      <div class="mb-4">
+        <label class="form-label" for="email">
+          @if(!email()?.touched || (email()?.touched && email()?.valid)){
+          <span class="text-muted">Email</span>
+          }@else if(email()?.errors?.['required']){
+          <span class="text-danger">Email is required</span>
+          }@else if(email()?.errors?.['email']){
+          <span class="text-danger">Please enter a valid email</span>
+          }
+        </label>
+        <input id="email"
+               formControlName="email"
+               class="form-control"
+               type="text"
+               placeholder="Enter email"
+               [class.is-invalid]="email()?.touched && email()?.invalid" />
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label" for="password">
+          @if(!password()?.touched || (password()?.touched && password()?.valid)){
+          <span class="text-muted">Password</span>
+          }@else if(password()?.errors?.['required']){
+          <span class="text-danger">Password is required</span>
+          }@else if(password()?.errors?.['minlength']){
+          <span class="text-danger">Password needs to be at least 6 characters long</span>
+          }
+        </label>
+        <input id="password"
+               formControlName="password"
+               class="form-control"
+               type="password"
+               placeholder="Enter password"
+               [class.is-invalid]="isInvalid('password')" />
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label" for="confirmPassword"
+               [ngClass]="{'text-danger': !passwordsMatch() && registerForm.get('confirmPassword')!.touched,
+                           'text-muted': passwordsMatch() || !registerForm.get('confirmPassword')!.touched}">
+          @if(registerForm.get("confirmPassword")!.touched && !passwordsMatch()){Passwords must match}@else{Confirm password}
+        </label>
+        <input id="confirmPassword"
+               formControlName="confirmPassword"
+               class="form-control"
+               type="password"
+               placeholder="Confirm password"
+               [class.is-invalid]="!passwordsMatch() && registerForm.get('confirmPassword')!.touched" />
+      </div>
+
+
+      <div class="mb-4">
+        <label class="form-label text-muted" for="firstName">First Name</label>
+        <input id="firstName" formControlName="firstName" class="form-control" type="text" placeholder="Enter your first name" />
+      </div>
+      <div class="mb-4">
+        <label class="form-label text-muted" for="lastName">Last Name</label>
+        <input id="lastName" formControlName="lastName" class="form-control" type="text" placeholder="Enter your last name" />
+      </div>
+
+      <button type="submit" class="d-block mx-auto mt-4 px-4 py-2 rounded shadow" [disabled]="registerForm.invalid || isLoading">
+        Register
+      </button>
+
+      @if(isLoading){
+      <div class="text-center">Creating account</div>
+      }@else if(errorMessage){
+      <div class="alert alert-danger mt-3 text-center">
+        {{ errorMessage }}
+      </div>
+      }
+
+      <p class="text-center text-sm mt-4 text-indigo-600">
+        Already have an account?
+        <a routerLink="/account/login"  class="text-indigo-600 hover:underline">Login</a>
+      </p>
+    </form>
+  </div>
+</div>
