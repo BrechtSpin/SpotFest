@@ -2,7 +2,7 @@
 
 namespace UserAuthService.Models;
 
-public class AppUser : IdentityUser
+public class SpotFestUser : IdentityUser
 {
     // IdentityUser includes:
     // - Id (string)                    -- Gets or sets the primary key for this user.
@@ -24,5 +24,5 @@ public class AppUser : IdentityUser
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime LastLoginAt { get; set; } = DateTime.UtcNow;
+    public DateTime LastLoginAt { get; set; } 
 }

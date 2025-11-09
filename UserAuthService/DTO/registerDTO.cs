@@ -2,7 +2,7 @@
 
 namespace UserAuthService.DTO
 {
-    public class LoginDTO
+    public class RegisterDTO
     {
         [Required, StringLength(200)]
         [EmailAddress]
@@ -10,5 +10,9 @@ namespace UserAuthService.DTO
 
         [Required, StringLength(200, MinimumLength = 6)]
         public string Password { get; set; } = string.Empty;
+
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+
     }
 }
