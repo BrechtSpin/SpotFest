@@ -5,5 +5,5 @@ namespace UserAuthService.Services;
 public interface IAuthService
 {
     Task<(bool, string)> Register(RegisterDTO registerDTO);
-    Task<bool> LoginAttempt(LoginDTO loginDTO);
+    Task<(AuthResponseDto authResponseDto, string? token)> LoginAttempt(LoginDTO loginDTO);
 }

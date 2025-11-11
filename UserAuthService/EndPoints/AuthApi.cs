@@ -16,6 +16,8 @@ public static class AuthApi
 
         group.MapPost("/register", Register);
         group.MapPost("/login", Login);
+        group.MapPost("/logout", Logout)
+            .RequireAuthorization();
     }
 
     private static async Task<IResult> Register(
@@ -24,22 +26,34 @@ public static class AuthApi
     {
         var result = await authService.Register(registerDTO);
         if (result.Item1) return Results.Ok();
-        return Results.Problem(result.Item2);
+        return Results.BadRequest(result.Item2);
     }
 
     private static async Task<IResult> Login(
         IAuthService authService,
+        HttpResponse httpResponse,
         LoginDTO loginDTO
         )
     {
-        if (await authService.LoginAttempt(loginDTO))
-        {
-            return Results.Ok();
-        }
-        else
-        {
-            return Results.Unauthorized();
-        }
+        var result = await authService.LoginAttempt(loginDTO);
+        if(!result.authResponseDto.Success) return Results.BadRequest(result.authResponseDto);
 
+        httpResponse.Cookies.Append("SpotFestUser", result.token!, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTimeOffset.UtcNow.AddHours(24)
+        });
+        return Results.Ok(result);
+    }
+
+    private static async Task<IResult> Logout(
+        IAuthService authService,
+        HttpResponse httpResponse
+        )
+    {
+        httpResponse.Cookies.Delete("SpotFestUser");
+        return Results.Ok();
     }
 }
