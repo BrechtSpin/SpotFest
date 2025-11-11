@@ -19,8 +19,8 @@ export const routes: Routes = [
   { path: 'happening/add', component: HappeningCreateFormComponent },
   { path: 'happening/:slug', component: HappeningDetailComponent },
   { path: 'contact', component: ContactFormComponent },
-  { path: 'account/register', component: RegisterComponent },
-  { path: 'account/login', component: LoginComponent},
+  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent},
   { path: '404', component: NotFound404Component },
   { path: '**', redirectTo: '' }  //falback
 ];
