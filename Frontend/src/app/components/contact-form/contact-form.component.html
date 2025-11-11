@@ -1,57 +1,56 @@
 <div class="card p-4 max-w-md mx-auto">
   <h2 class="text-xl font-bold mb-4">Get Access to the GitHub page of this site</h2>
 
-    <h3 class="text-center mb-4">Get Access to this sites GitHub page</h3>
+  <h3 class="text-center mb-4">Get Access to this sites GitHub page</h3>
 
-    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
 
-      @if(!submitted || contactForm.invalid){
+    @if(!submitted || contactForm.invalid){
 
-      <div class="mb-4">
-        <label class="form-label" for="name"
-               [ngClass]="{'text-danger': isInvalid('name'),
+    <div class="mb-4">
+      <label class="form-label" for="name"
+             [ngClass]="{'text-danger': isInvalid('name'),
                          'text-muted': !isInvalid('name')}">
-          @if(isInvalid('name')){Please enter your name}@else{Name}
-        </label>
-        <input id="name"
-               formControlName="name"
-               type="text"
-               class="form-control"
-               [class.is-invalid]="isInvalid('name')" />
-      </div>
+        @if(isInvalid('name')){Please enter your name}@else{Name}
+      </label>
+      <input id="name"
+             formControlName="name"
+             type="text"
+             class="form-control"
+             [class.is-invalid]="isInvalid('name')" />
+    </div>
 
-      <div class="mb-4">
-        <label for="email" class="form-label"
-               [ngClass]="{'text-danger': isInvalid('email'),
+    <div class="mb-4">
+      <label for="email" class="form-label"
+             [ngClass]="{'text-danger': isInvalid('email'),
                          'text-muted': !isInvalid('email')}">
-          @if(isInvalid('email')){Please enter a valid email}@else{Email}
-        </label>
-        <input id="email"
-               formControlName="email"
-               type="text"
-               class="form-control"
-               [class.is-invalid]="isInvalid('email')" />
-      </div>
+        @if(isInvalid('email')){Please enter a valid email}@else{Email}
+      </label>
+      <input id="email"
+             formControlName="email"
+             type="text"
+             class="form-control"
+             [class.is-invalid]="isInvalid('email')" />
+    </div>
 
 
-      <button type="submit" class="d-block mx-auto mt-4 px-4 py-2 rounded shadow" [disabled]="contactForm.invalid">
-        Submit
-      </button>
-      @if(errorMessage){
-      <div class="text-danger mt-2">{{ errorMessage }}</div>
-      }
+    <button type="submit" class="d-block mx-auto mt-4 px-4 py-2 rounded shadow" [disabled]="contactForm.invalid">
+      Submit
+    </button>
+    @if(errorMessage){
+    <div class="text-danger mt-2">{{ errorMessage }}</div>
+    }
 
-      }
+    }
 
-      @if(submitted && !contactForm.invalid){
-      <div class="text-center mt-4">
-        <p class="mb-4">
-          Thank you for your interest!<br />
-          Check your mail for the link. (it might arrive in your spam)
-        </p>
-      </div>
-      }
-    </form>
+    @if(submitted && !contactForm.invalid){
+    <div class="text-center mt-4">
+      <p class="mb-4">
+        Thank you for your interest!<br />
+        Check your mail for the link. (it might arrive in your spam)
+      </p>
+    </div>
+    }
+  </form>
 
-  </div>
 </div>
