@@ -1,12 +1,22 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using UserAuthService.DTO;
 using UserAuthService.Models;
 
 namespace UserAuthService.Services;
 
-public class AuthService(UserManager<SpotFestUser> userManager) : IAuthService
+public class AuthService(
+    UserManager<SpotFestUser> userManager,
+    SignInManager<SpotFestUser> signInManager,
+    IConfiguration configuration) : IAuthService
 {
-    private UserManager<SpotFestUser> _userManager = userManager;
+    private readonly UserManager<SpotFestUser> _userManager = userManager;
+    private readonly SignInManager<SpotFestUser> _signInManager = signInManager;
+    private readonly IConfiguration _configuration = configuration;
     public async Task<(bool, string)> Register(RegisterDTO registerDTO)
     {
         SpotFestUser newSpotFestUser = new()
@@ -36,9 +46,61 @@ public class AuthService(UserManager<SpotFestUser> userManager) : IAuthService
         return (false, errorResponse);
     }
 
-    public Task<bool> LoginAttempt(LoginDTO loginDTO)
+    public async Task<(AuthResponseDto authResponseDto, string? token)> LoginAttempt(LoginDTO loginDTO)
     {
-        throw new NotImplementedException();
+        var user = await _userManager.FindByEmailAsync(loginDTO.Email);
+        var authResponse = new AuthResponseDto { Email = loginDTO.Email, Success = false };
+        var failureMessage = "Invalid email or password";
+
+        if (user is null)
+        {
+            authResponse.Error = failureMessage;
+        }
+        else
+        {
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
+
+            if (result.Succeeded)
+            {
+                authResponse.Success = true;
+                authResponse.Expiration = DateTime.UtcNow.AddHours(24);
+                return (authResponse, GenerateJwtToken(user));
+            }
+            else
+            {
+                authResponse.Error = failureMessage;
+            }
+        }
+        return (authResponse, null);
+    }
+
+    private string GenerateJwtToken(SpotFestUser user)
+    {
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        var jwtIssuer = _configuration["JWT:ISSUER"];
+        var jwtAudience = _configuration["JWT:AUDIENCE"];
+        var jwtKey = _configuration["JWT:KEY"];
+
+        var key = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(jwtKey!));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: jwtIssuer,
+            audience: jwtAudience,
+            claims: claims,
+            notBefore: DateTime.UtcNow,
+            expires: DateTime.UtcNow.AddHours(24),
+            signingCredentials: creds
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
 }
