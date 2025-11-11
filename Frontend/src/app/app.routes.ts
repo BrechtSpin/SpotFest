@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './core/auth.guard';
 import { HomepageComponent } from '@components/Homepage/homepage.component';
 import { ArtistListComponent } from '@components/artist-list/artist-list.component';
 import { ArtistDetailsComponent } from '@components/artist-details/artist-details.component';
@@ -16,7 +17,7 @@ export const routes: Routes = [
   { path: 'artist/:guid', component: ArtistDetailsComponent },
   { path: 'artist/:guid/:name', component: ArtistDetailsComponent },
   { path: 'happening', component: HappeningListComponent },
-  { path: 'happening/add', component: HappeningCreateFormComponent },
+  { path: 'happening/add', component: HappeningCreateFormComponent , canActivate: [AuthGuard] },
   { path: 'happening/:slug', component: HappeningDetailComponent },
   { path: 'contact', component: ContactFormComponent },
   { path: 'register', component: RegisterComponent },
