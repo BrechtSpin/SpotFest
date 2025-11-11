@@ -1,22 +1,20 @@
 using Microsoft.EntityFrameworkCore;
-using ArtistService.Messaging;
-using ArtistService.Services;
-using ArtistService.EndPoints;
-using ArtistService.Data.Repositories;
+using UserAuthService;
+using UserAuthService.Data.Repositories;
+using UserAuthService.EndPoints;
+using UserAuthService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddLogging();
-builder.Services.AddScoped<IArtistServices, ArtistServices>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ArtistServiceContext>(options =>
+builder.Services.AddDbContextFactory<UserAuthContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-builder.Services.AddMassTransitConfiguration(builder.Configuration);
-builder.Services.AddScoped<IPublisherService, PublisherService>();
+builder.Services.AddAuthIdentityConfig(builder.Configuration);
+builder.Services.AddAuthorization();
 
 #if DEBUG
 builder.Services.AddEndpointsApiExplorer();
@@ -25,9 +23,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
     options.AddPolicy("dev", builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("http://localhost:60000")
                .AllowAnyMethod()
-               .AllowAnyHeader();
+               .AllowAnyHeader()
+               .AllowCredentials();
     }));
 #endif
 
@@ -42,11 +41,12 @@ app.UseCors("dev");
 
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<ArtistServiceContext>();
+    var db = scope.ServiceProvider.GetRequiredService<UserAuthContext>();
     db.Database.Migrate();
 }
 
-// Configure the HTTP request pipeline.
-app.MapArtistApiEndpoints();
+app.UseAuthorization();
+
+app.MapAuthApiEndpoints();
 
 app.Run();

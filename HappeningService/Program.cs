@@ -4,6 +4,7 @@ using HappeningService.Messaging;
 using HappeningService.Services;
 using HappeningService.Data.Repositories;
 using HappeningService.Services.Hubs;
+using HappeningService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddDbContextFactory<HappeningContext>(options =>
 
 builder.Services.AddMassTransitConfiguration(builder.Configuration);
 builder.Services.AddScoped<IPublisherService, PublisherService>();
+
+builder.Services.AddAuthConfig(builder.Configuration);
 
 #if DEBUG
 builder.Services.AddEndpointsApiExplorer();
@@ -49,7 +52,8 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
-// Configure the HTTP request pipeline.
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapHappeningApiEndpoints();
 

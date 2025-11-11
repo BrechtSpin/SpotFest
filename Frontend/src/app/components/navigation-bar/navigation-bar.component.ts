@@ -8,9 +8,6 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule],
   templateUrl: './navigation-bar.component.html',
   styles: [`
-    .navbar-brand img {
-      max-height: 40px;
-    }
     .navbar-nav .nav-link {
       font-weight: 500;
       text-transform: uppercase;
