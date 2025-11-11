@@ -58,12 +58,12 @@ export class RegisterComponent {
 
     const { confirmPassword, ...payload } = this.registerForm.getRawValue();
 
-    this.authService.postRegister(payload).subscribe({
+    this.authService.register(payload).subscribe({
       next: () => {
         this.router.navigate(['/login']);
       },
       error: (error) => {
-        this.errorMessage = error.error?.message || 'Registration failed. Please try again.';
+        this.errorMessage = error.error || 'Registration failed. Please try again.';
         this.isLoading = false;
       },
     });

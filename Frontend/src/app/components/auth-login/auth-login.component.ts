@@ -2,12 +2,12 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '@services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'auth-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './auth-login.component.html'
 })
 export class LoginComponent {
@@ -36,12 +36,12 @@ export class LoginComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.authService.postLogin(this.loginForm.getRawValue()).subscribe({
+    this.authService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/']);
       },
       error: (error) => {
-        this.errorMessage = error.error?.message || 'Login failed. Please try again.';
+        this.errorMessage = error.error.error || 'Login failed. Please try again.';
         this.isLoading = false;
       },
     });
