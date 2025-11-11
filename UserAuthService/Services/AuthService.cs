@@ -49,7 +49,7 @@ public class AuthService(
     public async Task<(AuthResponseDto authResponseDto, string? token)> LoginAttempt(LoginDTO loginDTO)
     {
         var user = await _userManager.FindByEmailAsync(loginDTO.Email);
-        var authResponse = new AuthResponseDto { Email = loginDTO.Email, Success = false };
+        var authResponse = new AuthResponseDto { Email = loginDTO.Email };
         var failureMessage = "Invalid email or password";
 
         if (user is null)
@@ -63,7 +63,6 @@ public class AuthService(
             if (result.Succeeded)
             {
                 authResponse.Success = true;
-                authResponse.Expiration = DateTime.UtcNow.AddHours(24);
                 return (authResponse, GenerateJwtToken(user));
             }
             else
@@ -103,4 +102,26 @@ public class AuthService(
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+    public async Task<AuthResponseDto> GetCurrentUser(string? userId)
+    {
+        var authResponse = new AuthResponseDto();
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            authResponse.Error = "NotFound";
+        }
+        else
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null)
+            {
+                authResponse.Error = "NotFound";
+            }
+            else
+            {
+                authResponse.Success = true;
+                authResponse.Email = user.Email!;
+            }
+        }
+        return authResponse;
+    }
 }

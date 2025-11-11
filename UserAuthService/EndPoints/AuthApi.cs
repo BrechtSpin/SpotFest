@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing.Tree;
-using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
+﻿using System.Security.Claims;
 using UserAuthService.DTO;
 using UserAuthService.Services;
 
@@ -18,6 +14,9 @@ public static class AuthApi
         group.MapPost("/login", Login);
         group.MapPost("/logout", Logout)
             .RequireAuthorization();
+        group.MapGet("/me", GetCurrentUser)
+            .RequireAuthorization();
+
     }
 
     private static async Task<IResult> Register(
@@ -45,15 +44,27 @@ public static class AuthApi
             SameSite = SameSiteMode.Strict,
             Expires = DateTimeOffset.UtcNow.AddHours(24)
         });
-        return Results.Ok(result);
+        return Results.Ok(result.authResponseDto);
     }
 
     private static async Task<IResult> Logout(
-        IAuthService authService,
         HttpResponse httpResponse
         )
     {
         httpResponse.Cookies.Delete("SpotFestUser");
         return Results.Ok();
+    }
+
+    private static async Task<IResult> GetCurrentUser(
+        IAuthService authService,
+        HttpContext httpContext
+        )
+    {
+        var result = await authService.GetCurrentUser(httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        
+        if(result.Success) return Results.Ok(result);
+
+        httpContext.Response.Cookies.Delete("SpotFestUser");
+        return Results.Unauthorized();
     }
 }
