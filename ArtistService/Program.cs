@@ -3,7 +3,6 @@ using ArtistService.Messaging;
 using ArtistService.Services;
 using ArtistService.EndPoints;
 using ArtistService.Data.Repositories;
-using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -2,7 +2,6 @@
 using HappeningService.Services;
 using HappeningService.Services.Hubs;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace HappeningService.EndPoints;
 
@@ -12,12 +11,12 @@ public static class HappeningApi
     {
         var group = app.MapGroup("/api/happening");
 
-        group.MapPost("/new", CreateHappening);
+        group.MapPost("/new", CreateHappening)
+            .RequireAuthorization();
         group.MapGet("", GetHappeningFullNoSlug);
         group.MapGet("/s", GetHappeningsSearch);
         group.MapGet("/{slug}", GetHappeningFull);
         group.MapGet("/artist/{guid}", GetHappeningsOfArtist);
-        //group.MapGet("/current", GetHappeningsCurrentTimeframe);
         group.MapHub<HappeningsCurrentTimeframeHub>("/currenthub");
     }
 
