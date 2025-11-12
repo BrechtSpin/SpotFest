@@ -73,9 +73,9 @@ services:
       RabbitMQ__HostName: rabbitmq
       RabbitMQ__UserName: ${RABBITMQ_DEFAULT_USER}
       RabbitMQ__Password: ${RABBITMQ_DEFAULT_PASS}
-      JWT_KEY: ${JWT_KEY}
-      JWT_ISSUER: ${JWT_ISSUER}
-      JWT_AUDIENCE: ${JWT_AUDIENCE}
+      JWT__KEY: ${JWT_KEY}
+      JWT__ISSUER: ${JWT_ISSUER}
+      JWT__AUDIENCE: ${JWT_AUDIENCE}
 
   informationservice:
     container_name: informationservice
@@ -130,9 +130,9 @@ services:
       RabbitMQ__HostName: rabbitmq
       RabbitMQ__UserName: ${RABBITMQ_DEFAULT_USER}
       RabbitMQ__Password: ${RABBITMQ_DEFAULT_PASS}
-      JWT_KEY: ${JWT_KEY}
-      JWT_ISSUER: ${JWT_ISSUER}
-      JWT_AUDIENCE: ${JWT_AUDIENCE}
+      JWT__KEY: ${JWT_KEY}
+      JWT__ISSUER: ${JWT_ISSUER}
+      JWT__AUDIENCE: ${JWT_AUDIENCE}
 
   artistservice:
     container_name: artistservice
