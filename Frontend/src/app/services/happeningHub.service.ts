@@ -18,7 +18,8 @@ export class happeningHub {
     this.hub = new HubConnectionBuilder()
       .withUrl(`${this.hubUrl}`)
       .withAutomaticReconnect()
-      .configureLogging(LogLevel.Information)
+      .configureLogging(LogLevel.Warning)
+      //.configureLogging(LogLevel.Information)
       .build();
     await this.hub.start();
   }

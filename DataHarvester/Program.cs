@@ -22,9 +22,12 @@ builder.Services.AddControllers();
 #if DEBUG
 builder.Services.AddCors(options =>
     options.AddPolicy("dev", builder =>
-        {
-            builder.AllowAnyOrigin();
-        }));
+    {
+        builder.WithOrigins("http://localhost:60000")
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials();
+    }));
 #endif
 
 var app = builder.Build();

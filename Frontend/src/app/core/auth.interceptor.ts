@@ -20,7 +20,7 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401 && !req.url.includes('/api/auth/me')) {
           this.authService.logout();
-          this.router.navigate(['/login']);
+          this.router.navigate(['/login'], { queryParams: { message: 'login-required' } });
         }
         return throwError(() => error);
       })

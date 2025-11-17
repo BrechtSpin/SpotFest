@@ -1,5 +1,5 @@
 
-<div class="d-flex flex-grow-1 vh-100">
+<div class="d-flex flex-grow-1">
   <aside class="sidebar p-3 bg-light border-end overflow-x-hidden" [class.collapsed]="isCollapsed()">
 
     @if(!isCollapsed()){
@@ -79,7 +79,7 @@
     }
   </aside>
 
-  <aside class="sidebar-fixed bg-light d-flex flex-column align-items-center position-relative">
+  <aside class="sidebar-fixed d-flex flex-column align-items-center position-relative">
 
     <button class="btn btn-secondary toggle-btn shadow" (click)="toggleSidebar()">
       {{ isCollapsed() ? '→' : '←' }}

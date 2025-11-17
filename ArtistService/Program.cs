@@ -25,9 +25,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
     options.AddPolicy("dev", builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("http://localhost:60000")
                .AllowAnyMethod()
-               .AllowAnyHeader();
+               .AllowAnyHeader()
+               .AllowCredentials();
     }));
 #endif
 
