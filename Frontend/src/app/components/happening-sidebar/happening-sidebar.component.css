@@ -1,6 +1,7 @@
 .sidebar {
   width: 250px;
   transition: width 0.2s ease;
+  direction: rtl;
 }
 
   .sidebar.collapsed {
@@ -10,6 +11,7 @@
 
   .sidebar > * {
     min-width: 210px;
+    direction: ltr;
   }
 
 .sidebar-fixed {
