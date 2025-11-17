@@ -1,74 +1,94 @@
-<div class="p-3">
-  <h5 class="mb-4">Happenings</h5>
 
-  @if (loading()) {
-  <div class="d-flex justify-content-center align-items-center flex-grow-1">
-    <div class="spinner-border text-primary">
-    </div>
-  </div>
-  }
+<div class="d-flex flex-grow-1 vh-100">
+  <aside class="sidebar p-3 bg-light border-end overflow-x-hidden" [class.collapsed]="isCollapsed()">
 
-  @if (error()){ <app-404></app-404>}
+    @if(!isCollapsed()){
+    <h5 class="mb-4">Happenings</h5>
 
-  @if (!loading()) {
-  <div>
-    @if (pastHappenings().length > 0){
-    <div>
-      <h6>Wrapped Up Happenings</h6>
-      <div class="list-group">
-        @for(happening of pastHappenings(); track happening.slug){
-        <a [routerLink]="['/happening', happening.slug]"
-           routerLinkActive="active"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="list-group-item list-group-item-action event-hover">
-          {{ happening.name }}<br>
-          <small>{{ happening.startDate| date:'dd-MM-yyyy'}} to {{happening.endDate| date:'dd-MM-yyyy'}}</small>
-        </a>
-        }
+    @if (loading()) {
+    <div class="d-flex justify-content-center align-items-center flex-grow-1">
+      <div class="spinner-border text-primary">
       </div>
     </div>
     }
-    <br />
 
-    @if (currentHappenings().length > 0) {
+    @if (error()){ <app-404></app-404>}
+
+    @if (!loading()) {
     <div>
-      <h6>Ongoing Happenings </h6>
-      <div class="list-group">
-        @for (happening of currentHappenings(); track happening.slug){
-        <a [routerLink]="['/happening', happening.slug]"
-           routerLinkActive="active"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="list-group-item list-group-item-action event-hover">
-          {{ happening.name }}<br>
-          <small>{{ happening.startDate| date:'dd-MM-yyyy'}} to {{happening.endDate| date:'dd-MM-yyyy'}}</small>
-        </a>
-        }
+      @if (pastHappenings().length > 0){
+      <div>
+        <h6>Wrapped Up Happenings</h6>
+        <div class="list-group">
+          @for(happening of pastHappenings(); track happening.slug){
+          <a [routerLink]="['/happening', happening.slug]"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="list-group-item list-group-item-action event-hover">
+            {{ happening.name }}<br>
+            <small>{{ happening.startDate| date:'dd-MM-yyyy'}} to {{happening.endDate| date:'dd-MM-yyyy'}}</small>
+          </a>
+          }
+        </div>
       </div>
+      }
+      <br />
+
+      @if (currentHappenings().length > 0) {
+      <div>
+        <h6>Ongoing Happenings </h6>
+        <div class="list-group">
+          @for (happening of currentHappenings(); track happening.slug){
+          <a [routerLink]="['/happening', happening.slug]"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="list-group-item list-group-item-action event-hover">
+            {{ happening.name }}<br>
+            <small>{{ happening.startDate| date:'dd-MM-yyyy'}} to {{happening.endDate| date:'dd-MM-yyyy'}}</small>
+          </a>
+          }
+        </div>
+      </div>
+      }
+      <br />
+
+      @if (futureHappenings().length > 0) {
+      <div>
+        <h6>Upcoming Happenings </h6>
+        <div class="list-group">
+          @for (happening of futureHappenings(); track happening.slug){
+          <a [routerLink]="['/happening', happening.slug]"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="list-group-item list-group-item-action event-hover">
+            {{ happening.name }}<br>
+            <small>{{ happening.startDate| date:'dd-MM-yyyy'}} to {{happening.endDate| date:'dd-MM-yyyy'}}</small>
+          </a>
+          }
+        </div>
+      </div>
+      }
     </div>
     }
-    <br />
 
-    @if (futureHappenings().length > 0) {
-    <div>
-      <h6>Upcoming Happenings </h6>
-      <div class="list-group">
-        @for (happening of futureHappenings(); track happening.slug){
-        <a [routerLink]="['/happening', happening.slug]"
-           routerLinkActive="active"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="list-group-item list-group-item-action event-hover">
-          {{ happening.name }}<br>
-          <small>{{ happening.startDate| date:'dd-MM-yyyy'}} to {{happening.endDate| date:'dd-MM-yyyy'}}</small>
-        </a>
-        }
-      </div>
+    <div class="text-center mt-4">
+      <button class="btn btn-secondary shadow" routerLink="/happening/add">
+        +
+      </button>
     </div>
     }
-  </div>
-  }
+  </aside>
 
-  <div class="text-center m-4">
-    <button type="button" routerLink="/happening/add" class="btn btn-secondary"> + </button>
-  </div>
+  <aside class="sidebar-fixed bg-light d-flex flex-column align-items-center position-relative">
 
+    <button class="btn btn-secondary toggle-btn shadow" (click)="toggleSidebar()">
+      {{ isCollapsed() ? '→' : '←' }}
+    </button>
+
+    @if(isCollapsed()){
+      <button class="btn btn-secondary shadow add-btn" routerLink="/happening/add">
+        +
+      </button>
+    }
+  </aside>
 </div>

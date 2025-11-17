@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InfoService } from '@services/info.service';
-import { ContactFormModel } from '@models/contact-form-model'
 
 @Component({
   selector: 'app-contact-form',

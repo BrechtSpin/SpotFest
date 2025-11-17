@@ -9,7 +9,8 @@ import { NotFound404Component } from '@components/404/404-not-found';
   selector: 'app-happening-sidebar',
   standalone: true,
   imports: [CommonModule, RouterModule, NotFound404Component ],
-  templateUrl: './happening-sidebar.component.html'
+  templateUrl: './happening-sidebar.component.html',
+  styleUrl:'happening-sidebar.component.css'
 })
 export class HappeningSidebarComponent implements OnInit {
   private hub = inject(happeningHub);
@@ -36,6 +37,8 @@ export class HappeningSidebarComponent implements OnInit {
   loading = computed(() => this.happeningResource.isLoading());
   error = computed(() => this.happeningResource.error());
 
+  isCollapsed = signal(false);
+  toggleSidebar() { this.isCollapsed.update(value => !value); }
 
   async ngOnInit() {
 
