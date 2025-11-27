@@ -19,8 +19,10 @@ export class ArtistService {
   getArtistWithMetricsByGuid(guid: string, name: string | null): Observable<ArtistWithMetrics> {
     /*if (!guid) { return of(null); }*/
     if (!name) { name = ''; }
-    const myvar = this.http.get<ArtistWithMetrics>(`${this.Url}/${guid}/${name}`)
-    return myvar
+    return this.http.get<ArtistWithMetrics>(`${this.Url}/${guid}/${name}`)
+  }
+  getArtistGuidByName(name: string): Observable<string> {
+    return this.http.get<string>(`${this.Url}/s/${name}`)
   }
 
   getArtistByNameSpotify(searchterm: string): Observable<any> {

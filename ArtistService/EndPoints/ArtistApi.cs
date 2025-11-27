@@ -14,6 +14,7 @@ public static class ArtistApi
         var group = app.MapGroup("/api/artist");
 
         group.MapGet("/s", GetArtistsSearch);
+        group.MapGet("/s/{name}", GetArtistGuidByName);
         group.MapGet("/{guid}/{name?}", GetArtistWithMetrics)
             .WithName("GetArtist"); ;
     }
@@ -34,5 +35,13 @@ public static class ArtistApi
         var artistWithMetrics = await services.GetArtistWithMetrics(guid);
         if (artistWithMetrics == null) return Results.NotFound();
         return Results.Ok(artistWithMetrics);
+    }
+    private static async Task<IResult> GetArtistGuidByName(
+        IArtistServices services,
+        string name)
+    {
+        var guid = await services.GetArtistGuidByName(name);
+        if(guid == null) return Results.NotFound();
+        return Results.Ok(guid);
     }
 }
