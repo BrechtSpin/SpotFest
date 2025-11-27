@@ -1,4 +1,9 @@
 <div class="container text-center my-4">
+  @if(loading()){
+  <p>Loading…</p>
+  } @else if (error()) {
+  <app-404></app-404>
+  } @else {
   <div class="row justify-content-center mb-4">
     <div class="col-auto">
       <img [src]="artist()?.pictureMediumUrl"
@@ -16,6 +21,7 @@
                           [metrics]="ds.metrics"
                           [happenings]="ds.happenings"></app-timeline-graph>
     </div>
-      }
+    }
   </div>
+  }
 </div>

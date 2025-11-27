@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit, resource, Signal } from '@angular/core';
+import { Component, computed, effect, inject, resource, Signal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router'
 
@@ -7,13 +7,15 @@ import { ArtistService } from '@services/artist.service';
 import { HappeningService } from '@services/happening.service';
 import { ArtistWithMetrics } from '@models/artist-with-metrics';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { firstValueFrom, map, Observable, of } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 import slugify from 'slugify';
+import { isGuid } from '@utils/is-guid'
+import { NotFound404Component } from '../404/404-not-found';
 
 @Component({
   selector: 'app-artist-details',
   standalone: true,
-  imports: [CommonModule, TimelineGraphComponent],
+  imports: [CommonModule, NotFound404Component, TimelineGraphComponent],
   templateUrl: './artist-details.component.html',
   styleUrl: './artist-details.component.css',
 })
@@ -35,6 +37,7 @@ export class ArtistDetailsComponent {
     ),
     { initialValue: null }
   );
+  guidLookupError = signal<string | null>(null);
 
   artistResource = resource<ArtistWithMetrics | null, string | null>({
     request: () => this.artistRouteGuid(),
@@ -55,6 +58,10 @@ export class ArtistDetailsComponent {
     defaultValue: null,
   });
 
+  loading = computed(() => this.artistResource.isLoading());
+  error = computed(() => {
+    return this.artistResource.error() ?? this.guidLookupError();
+  });
   artist = computed(() => this.artistResource.value());
 
   dataSets = computed(() => {
@@ -90,13 +97,30 @@ export class ArtistDetailsComponent {
 
   fixUrl = effect(() => {
     const artist = this.artistResource.value();
-    const guid = this.artistRouteGuid();
-    if (artist && guid) {
+    const guidMaybe = this.artistRouteGuid();
+
+    if (guidMaybe === null) {
+      this.router.navigate(['/']);
+      return;
+    }
+
+    if (!isGuid(guidMaybe)) {
+      this.artistService.getArtistGuidByName(guidMaybe).subscribe({
+        next: (guidFromName: string) => {
+          this.guidLookupError.set(null);
+          this.router.navigate(['/artist', guidFromName]);
+          },
+        error: () => (this.guidLookupError.set('NotFound'))
+      })
+      return
+    }
+
+    if (artist && guidMaybe) {
       const name = this.artistRouteName();
       const slug = slugify(artist.name, { strict: true, remove: /[*+~.()'"!?:@]/g } )
       if (name !== slug) {
         this.router.navigate(
-          ['/artist', guid, slug],
+          ['/artist', guidMaybe, slug],
           { replaceUrl: true }
         );
       }

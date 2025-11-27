@@ -63,9 +63,19 @@ public class ArtistServices(ArtistServiceContext context, IPublisherService publ
             });
     }
 
+    public async Task<string?> GetArtistGuidByName(string name)
+    {
+        var artists = await _context.Artists.Where(a =>  a.Name == name)
+            .Include(a => a.Metrics)
+            .OrderByDescending(a => a.Metrics.Max(m => m.Listeners))
+            .ToListAsync();
+        if(artists is null) return null;
+        return artists[0].Guid.ToString();
+    }
+
     public async Task<ArtistSummary[]> GetArtistsSearch(string query, int index)
     {
-        if (query == null || query =="" || index < 0) return [];
+        if (query == null || query == "" || index < 0) return [];
 
         var artists = await _context.Artists
             .OrderBy(a => a.Name)
