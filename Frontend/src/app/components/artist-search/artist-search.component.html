@@ -1,27 +1,41 @@
 @if (!selectedArtist()) {
-<input type="text"
-       [value]="searchName()"
-       (input)="onInput($event)"
-       placeholder="Search for artist..."
-       class="form-control mb-2" />
 
+<div class="d-flex align-items-center">
+  <input type="text"
+         [value]="searchName()"
+         (input)="onInput($event)"
+         placeholder="Search for artist..."
+         class="form-control mb-2" />
+  <button type="button" (click)="onDeleteClick()" class="btn btn-danger align-self-start ms-2">Delete</button>
+</div>
 
-@if (artists().length > 0) {
+  @if (artists().length > 0) {
 <ul class="list-group">
   @for (artist of artists(); track artist.spotifyId) {
-  <li class="list-group-item"
+  <li class="list-group-item d-flex flex-row align-items-center"
       (click)="selectArtist(artist)"
-      [style.cursor]="'pointer'"
-      [style.fontWeight]="selectedArtist()?.spotifyId === artist.spotifyId ? 'bold' : 'normal'">
+      [style.cursor]="'pointer'">
+    <img src="{{artist.thumbnail}}"
+         (error)="artist.thumbnail = 'questionmark.512.png'"
+         width="50"
+         height="50"
+         class="rounded me-3" />
     {{ artist.name }}
   </li>
   }
 </ul>
-}
-}
+  }
+  }
 
-@if (selectedArtist()) {
-<div class="mt-2">
-  <p>Selected: {{ selectedArtist()?.name }}</p>
+  @if (selectedArtist()) {
+<div class="d-flex align-items-center justify-content-between ms-2">
+  <div>
+    <img src="{{selectedArtist()?.thumbnail}}"
+         width="50"
+         height="50"
+         class="rounded me-3" />
+    {{ selectedArtist()?.name }}
+  </div>
+  <button type="button" (click)="onDeleteClick()" class="btn btn-danger">Delete</button>
 </div>
-}
+  }

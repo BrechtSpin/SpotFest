@@ -56,6 +56,10 @@ export class HappeningCreateFormComponent {
     console.log(this.happeningArtists.value)
   }
 
+  onArtistRemove(index: number) {
+    this.happeningArtists.removeAt(index)
+  }
+
   submit() {
     if (this.happeningForm.valid) {
       const rawValue = this.happeningForm.value;

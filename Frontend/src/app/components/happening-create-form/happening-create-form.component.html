@@ -1,7 +1,7 @@
 
 <form [formGroup]="happeningForm" (ngSubmit)="submit()" style="width: 240px">
 
-  <div class="block mb-4">
+  <div class="mb-4">
     <label for="name" class="form-label"
            [ngClass]="{'text-danger': isInvalid('name'),
                      'text-muted': !isInvalid('name')}">
@@ -14,7 +14,7 @@
            [class.is-invalid]="isInvalid('name')" />
   </div>
 
-  <div class="block mb-4">
+  <div class="mb-4">
     <label for="startDate" class="form-label"
            [ngClass]="{'text-danger': isInvalid('startDate'),
                      'text-muted': !isInvalid('startDate')}">
@@ -27,8 +27,8 @@
            [class.is-invalid]="isInvalid('startDate')" />
   </div>
 
-  <div class="block mb-4">
-    <label for="endDate" class="form-label">End date</label>
+  <div class="mb-4">
+    <label for="endDate" class="form-label text-muted">End date</label>
     <input id="endDate"
            formControlName="endDate"
            type="date"
@@ -43,14 +43,12 @@
       && happeningArtists.at(i).get('spotifyId')?.touched){
       <div class="text-danger">Search and pick an artist from the list or remove it.</div>
       }
-      <div class="d-flex align-items-center">
-        <app-artist-search (artistSelected)="onArtistSelected($event, i)"
-                           [class.is-invalid]="happeningArtists.at(i).get('spotifyId')?.invalid
-                                          && happeningArtists.at(i).get('spotifyId')?.touched">
-          >
-        </app-artist-search>
-        <button type="button" (click)="removeArtist(i)" class="btn btn-danger align-self-start ms-2">Delete</button>
-      </div>
+      <app-artist-search (artistSelected)="onArtistSelected($event, i)"
+                         (deleteMe)="onArtistRemove(i)">
+        [class.is-invalid]="happeningArtists.at(i).get('spotifyId')?.invalid
+        && happeningArtists.at(i).get('spotifyId')?.touched">
+        >
+      </app-artist-search>
     </div>
     }
     <button type="button" (click)="addArtist()" class="btn btn-secondary">Add Artist</button>

@@ -41,4 +41,10 @@ export class ArtistSearchComponent {
     this.selectedArtist.set(artist);
     this.artistSelected.emit(artist);
   }
+
+  @Output() deleteMe = new EventEmitter<void>();
+
+  onDeleteClick() {
+    this.deleteMe.emit();
+  }
 }

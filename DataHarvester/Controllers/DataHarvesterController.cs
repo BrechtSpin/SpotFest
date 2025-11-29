@@ -18,6 +18,7 @@ public class DataHarvesterController(ISpotifyWebApiClient webClient) : Controlle
         {
             Name = artist.Name,
             SpotifyId = artist.Id,
+            Thumbnail = artist.Images.LastOrDefault()?.url ?? ""
         });
 
         return Ok(result);
