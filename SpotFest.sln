@@ -31,6 +31,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotFestTests", "SpotFestTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAuthService", "UserAuthService\UserAuthService.csproj", "{9EB83B35-2A86-4B7B-B430-0D043E0FAFC8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerService", "LoggerService\LoggerService.csproj", "{578FD95F-30F5-497A-8A38-6D2E1BCD0291}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0BF7CAD5-1DC9-492A-AD95-2DCD5671F5DA} = {0BF7CAD5-1DC9-492A-AD95-2DCD5671F5DA}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +80,10 @@ Global
 		{9EB83B35-2A86-4B7B-B430-0D043E0FAFC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EB83B35-2A86-4B7B-B430-0D043E0FAFC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EB83B35-2A86-4B7B-B430-0D043E0FAFC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{578FD95F-30F5-497A-8A38-6D2E1BCD0291}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{578FD95F-30F5-497A-8A38-6D2E1BCD0291}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{578FD95F-30F5-497A-8A38-6D2E1BCD0291}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{578FD95F-30F5-497A-8A38-6D2E1BCD0291}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

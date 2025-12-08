@@ -1,8 +1,7 @@
-﻿using Contracts;
-using HappeningService.Messaging.Consumers;
+﻿using LoggerService.Messaging.Consumers;
 using MassTransit;
-namespace HappeningService.Messaging;
 
+namespace LoggerService.Messaging;
 public static class MassTransitConfig
 {
     public static void AddMassTransitConfiguration(this IServiceCollection services, IConfiguration configuration)
@@ -11,9 +10,7 @@ public static class MassTransitConfig
         {
             config.SetKebabCaseEndpointNameFormatter();
 
-            config.AddConsumer<HappeningArtistCompleteConsumer>();
-
-            config.AddRequestClient<ArtistFetchSummariesRequest>();
+            config.AddConsumer<ChangeLogMessageConsumer>();
 
             config.UsingRabbitMq((context, cfg) =>
             {

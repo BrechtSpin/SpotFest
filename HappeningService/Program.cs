@@ -5,6 +5,7 @@ using HappeningService.Services;
 using HappeningService.Data.Repositories;
 using HappeningService.Services.Hubs;
 using HappeningService;
+using HappeningService.Data.Interceptors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +15,12 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<IHappeningsCurrentTimeframeService, HappeningsCurrentTimeframeService>();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<ChangeLogInterceptor>();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContextFactory<HappeningContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+builder.Services.AddDbContextFactory<HappeningContext>((servp , options) =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+           .AddInterceptors(servp.GetRequiredService<ChangeLogInterceptor>()));
 
 builder.Services.AddMassTransitConfiguration(builder.Configuration);
 builder.Services.AddScoped<IPublisherService, PublisherService>();
