@@ -1,5 +1,4 @@
 import { Component, computed, effect, inject, resource, Signal, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router'
 
 import { TimelineGraphComponent } from '@components/graph/graph.component';
@@ -15,7 +14,7 @@ import { NotFound404Component } from '../404/404-not-found';
 @Component({
   selector: 'app-artist-details',
   standalone: true,
-  imports: [CommonModule, NotFound404Component, TimelineGraphComponent],
+  imports: [NotFound404Component, TimelineGraphComponent],
   templateUrl: './artist-details.component.html',
   styleUrl: './artist-details.component.css',
 })

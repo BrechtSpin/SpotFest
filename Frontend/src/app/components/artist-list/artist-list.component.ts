@@ -2,7 +2,6 @@ import { Component, computed, effect, inject, resource, signal } from '@angular/
 import { ArtistService } from '@services/artist.service';
 import { ArtistSummary } from '@models/artist-summary';
 import { lastValueFrom } from 'rxjs';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 export interface SearchParameters {
@@ -13,7 +12,7 @@ export interface SearchParameters {
 @Component({
   selector: 'app-artist-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './artist-list.component.html',
   styleUrls: ['./artist-list.component.css']
 })

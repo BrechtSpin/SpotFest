@@ -7,7 +7,6 @@ import {
   effect,
   input,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Chart, registerables } from 'chart.js/auto';
 import annotationPlugin, { AnnotationOptions } from 'chartjs-plugin-annotation';
 import 'chartjs-adapter-date-fns';
@@ -24,7 +23,7 @@ export interface DataPoint {
 @Component({
   selector: 'app-timeline-graph',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './graph.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

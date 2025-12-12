@@ -1,5 +1,4 @@
 import { Component, signal, computed, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService } from '@services/auth.service';
@@ -7,7 +6,7 @@ import { AuthService } from '@services/auth.service';
 @Component({
   selector: 'app-user-status',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink],
   templateUrl: './user-status.component.html'
 })
 export class UserStatusComponent implements OnInit {

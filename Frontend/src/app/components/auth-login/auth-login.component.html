@@ -1,8 +1,10 @@
 <div class="container d-flex flex-column justify-content-center align-items-center mt-5">
 
-  <div *ngIf="alertMessage" class="alert" [ngClass]="'alert-' + alertType" role="alert">
-    {{ alertMessage }}
-  </div>
+  @if (alertMessage) {
+    <div class="alert" [ngClass]="'alert-' + alertType" role="alert">
+      {{ alertMessage }}
+    </div>
+  }
 
   <div class="card shadow-lg p-4" style="width: 400px;">
 
@@ -15,41 +17,43 @@
                [ngClass]="{'text-danger': isInvalid('email'),
                          'text-muted': !isInvalid('email')}">
           @if(isInvalid('email')){email is required}@else{email}
-        </label>
-        <input id="email"
-               formControlName="email"
-               class="form-control"
-               type="text"
-               placeholder="Enter email"
-               [class.is-invalid]="isInvalid('email')" />
-      </div>
+          </label>
+          <input id="email"
+            formControlName="email"
+            class="form-control"
+            type="text"
+            placeholder="Enter email"
+            [class.is-invalid]="isInvalid('email')" />
+          </div>
 
-      <div class="mb-4">
-        <label class="form-label" for="password"
+          <div class="mb-4">
+            <label class="form-label" for="password"
                [ngClass]="{'text-danger': isInvalid('password'),
                          'text-muted': !isInvalid('password')}">
-          @if(isInvalid('password')){Password is required}@else{Password}
-        </label>
-        <input id="password"
-               formControlName="password"
-               class="form-control"
-               type="password"
-               placeholder="Enter password"
-               [class.is-invalid]="isInvalid('password')" />
-      </div>
+              @if(isInvalid('password')){Password is required}@else{Password}
+              </label>
+              <input id="password"
+                formControlName="password"
+                class="form-control"
+                type="password"
+                placeholder="Enter password"
+                [class.is-invalid]="isInvalid('password')" />
+              </div>
 
-      <button type="submit" class="d-block mx-auto mt-4 px-4 py-2 rounded shadow" [disabled]="loginForm.invalid || isLoading">
-        Login
-      </button>
+              <button type="submit" class="d-block mx-auto mt-4 px-4 py-2 rounded shadow" [disabled]="loginForm.invalid || isLoading">
+                Login
+              </button>
 
-      <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
-        {{ errorMessage }}
-      </div>
+              @if (errorMessage) {
+                <div class="alert alert-danger mt-3 text-center">
+                  {{ errorMessage }}
+                </div>
+              }
 
-      <p class="text-center text-sm mt-4 text-indigo-600">
-        Don't have an account yet?
-        <a routerLink="/register" class="text-indigo-600 hover:underline">Register</a>
-      </p>
-    </form>
-  </div>
-</div>
+              <p class="text-center text-sm mt-4 text-indigo-600">
+                Don't have an account yet?
+                <a routerLink="/register" class="text-indigo-600 hover:underline">Register</a>
+              </p>
+            </form>
+          </div>
+        </div>
