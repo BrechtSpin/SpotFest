@@ -11,22 +11,78 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
-      - traefik
       - spotfest
+      # dashboard
+      - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.rabbitmq.rule=Host(`${DOMAIN}`) && PathPrefix(`/dash`)"
-      - "traefik.http.routers.rabbitmq.entrypoints=websecure"
-      - "traefik.http.routers.rabbitmq.tls=true"
-      - "traefik.http.routers.rabbitmq.tls.certresolver=myresolver"
-      # Route dashboard
-      - "traefik.http.services.rabbitmq.loadbalancer.server.port=15672"
-      - "traefik.http.routers.rabbitmq.middlewares=strip-dash"
-      - "traefik.http.middlewares.strip-dash.stripprefix.prefixes=/dash"
+      # dashboard
+      - "traefik.http.services.rabbitmq-ui.loadbalancer.server.port=15672"
+      - "traefik.http.routers.rabbitmq-ui.rule=Host(`${ALTDOMAIN}`) && PathPrefix(`/rabbitmq`)"
+      - "traefik.http.routers.rabbitmq-ui.middlewares=rabbitmq-ui-strip"
+      - "traefik.http.middlewares.rabbitmq-ui-strip.stripprefix.prefixes=/rabbitmq"
+      - "traefik.http.routers.rabbitmq-ui.entrypoints=websecure"
+      - "traefik.http.routers.rabbitmq-ui.tls=true"
+      - "traefik.http.routers.rabbitmq-ui.tls.certresolver=myresolver"
     environment:
     # from .env
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otelcol/config.yml"]
+    restart: always
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol/config.yml
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      #- "4318:4318"    # OTLP HTTP receiver
+      - "8889:8889"   # Prometheus metrics export
+    depends_on:
+      - jaeger
+      - prometheus
+    networks:
+      - spotfest
+      - telemetry
+
+  jaeger:
+    container_name: jaeger
+    image: jaegertracing/all-in-one:latest
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--spider", "-q", "http://localhost:16686"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - telemetry
+      # dashboard
+      - traefik
+    labels:
+      - "traefik.enable=true"      
+      # dashboard
+      - "traefik.http.services.jaeger-ui.loadbalancer.server.port=16686"
+      - "traefik.http.routers.jaeger-ui.rule=Host(`${ALTDOMAIN}`) && PathPrefix(`/jaeger`)"
+      - "traefik.http.routers.jaeger-ui.middlewares=jaeger-ui-strip"
+      - "traefik.http.middlewares.jaeger-ui-strip.stripprefix.prefixes=/jaeger"
+      - "traefik.http.routers.jaeger-ui.entrypoints=websecure"
+      - "traefik.http.routers.jaeger-ui.tls=true"
+      - "traefik.http.routers.jaeger-ui.tls.certresolver=myresolver"
+      - "traefik.http.routers.jaeger-ui.service=jaeger-ui"
+      # auth
+      - "traefik.http.routers.jaeger-ui.middlewares=jaeger-ui-auth"
+      - "traefik.http.middlewares.jaeger-ui-auth.basicauth.users=${JAEGER_AUTH_USER}:${JAEGER_AUTH_HASH}"
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - telemetry
 
   spotfest-db:
     container_name: spotfest-db
@@ -227,4 +283,6 @@ networks:
   traefik:
     external: true
   spotfest:
+    driver: bridge
+  telemetry:
     driver: bridge

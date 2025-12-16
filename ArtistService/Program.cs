@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.OpenTelemetry;
 using ArtistService.Messaging;
 using ArtistService.Services;
 using ArtistService.EndPoints;
@@ -17,6 +18,8 @@ builder.Services.AddDbContext<ArtistServiceContext>(options =>
 
 builder.Services.AddMassTransitConfiguration(builder.Configuration);
 builder.Services.AddScoped<IPublisherService, PublisherService>();
+
+builder.Services.AddOpenTelemetryService();
 
 #if DEBUG
 builder.Services.AddEndpointsApiExplorer();
