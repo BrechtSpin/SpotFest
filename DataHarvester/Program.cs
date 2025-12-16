@@ -1,3 +1,4 @@
+using Infrastructure.OpenTelemetry;
 using DataHarvester.SpotifyWeb;
 using DataHarvester.Messaging;
 
@@ -16,6 +17,8 @@ builder.Services.AddScoped<SpotifyHarvester>();
 
 builder.Services.AddMassTransitConfiguration(builder.Configuration);
 builder.Services.AddScoped<IPublisherService, PublisherService>();
+
+builder.Services.AddOpenTelemetryService();
 
 builder.Services.AddControllers();
 

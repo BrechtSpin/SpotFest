@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.OpenTelemetry;
 using HappeningService.EndPoints;
 using HappeningService.Messaging;
 using HappeningService.Services;
@@ -15,6 +16,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<IHappeningsCurrentTimeframeService, HappeningsCurrentTimeframeService>();
 
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<ChangeLogInterceptor>();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -24,6 +26,8 @@ builder.Services.AddDbContextFactory<HappeningContext>((servp , options) =>
 
 builder.Services.AddMassTransitConfiguration(builder.Configuration);
 builder.Services.AddScoped<IPublisherService, PublisherService>();
+
+builder.Services.AddOpenTelemetryService();
 
 builder.Services.AddAuthConfig(builder.Configuration);
 

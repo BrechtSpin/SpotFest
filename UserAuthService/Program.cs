@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.OpenTelemetry;
 using UserAuthService;
 using UserAuthService.Data.Repositories;
 using UserAuthService.EndPoints;
@@ -15,6 +16,8 @@ builder.Services.AddDbContextFactory<UserAuthContext>(options =>
 
 builder.Services.AddAuthIdentityConfig(builder.Configuration);
 builder.Services.AddAuthorization();
+
+builder.Services.AddOpenTelemetryService();
 
 #if DEBUG
 builder.Services.AddEndpointsApiExplorer();

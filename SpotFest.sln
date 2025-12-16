@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Frontend", "Frontend\Frontend.esproj", "{7C7A2865-3DC7-4BA0-87B6-606EF39A9080}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HappeningService", "HappeningService\HappeningService.csproj", "{A901CB76-468D-4ED3-8DB1-3CEFBF058096}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C3496241-8C33-49DA-A677-3EC010EB47EE} = {C3496241-8C33-49DA-A677-3EC010EB47EE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{0BF7CAD5-1DC9-492A-AD95-2DCD5671F5DA}"
 EndProject
@@ -17,7 +20,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobScheduler", "JobSchedule
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5FD7385A-B0E3-403B-BB24-0E2C060AAFEA}"
 	ProjectSection(SolutionItems) = preProject
+		.env = .env
 		docker-compose.yml = docker-compose.yml
+		otel-collector-config.yml = otel-collector-config.yml
+		prometheus.yml = prometheus.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InformationService", "InformationService\InformationService.csproj", "{BC0935CC-94E7-4C6C-9F32-A04F85632A40}"
@@ -35,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerService", "LoggerServ
 	ProjectSection(ProjectDependencies) = postProject
 		{0BF7CAD5-1DC9-492A-AD95-2DCD5671F5DA} = {0BF7CAD5-1DC9-492A-AD95-2DCD5671F5DA}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{C3496241-8C33-49DA-A677-3EC010EB47EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +92,10 @@ Global
 		{578FD95F-30F5-497A-8A38-6D2E1BCD0291}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{578FD95F-30F5-497A-8A38-6D2E1BCD0291}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{578FD95F-30F5-497A-8A38-6D2E1BCD0291}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3496241-8C33-49DA-A677-3EC010EB47EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3496241-8C33-49DA-A677-3EC010EB47EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3496241-8C33-49DA-A677-3EC010EB47EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3496241-8C33-49DA-A677-3EC010EB47EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

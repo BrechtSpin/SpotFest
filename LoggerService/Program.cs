@@ -1,7 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Infrastructure.OpenTelemetry;
+using LoggerService.Services;
 using LoggerService.Data.Repositories;
 using LoggerService.Messaging;
-using LoggerService.Services;
-using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,11 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ILoggerServices, LoggerServices>();
 
-builder.Services.AddMassTransitConfiguration(builder.Configuration);
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContextFactory<LoggerContext>((sp, options) =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+builder.Services.AddMassTransitConfiguration(builder.Configuration);
+
+builder.Services.AddOpenTelemetryService();
 
 
 var app = builder.Build();
