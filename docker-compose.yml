@@ -15,6 +15,9 @@ services:
       - spotfest
       # dashboard
       - traefik
+    ports:    
+      - "5672:5672"
+      - "15672:15672"
     labels:
       - "traefik.enable=true"
       # dashboard
@@ -34,10 +37,10 @@ services:
     container_name: otel-collector
     image: otel/opentelemetry-collector-contrib:latest
     profiles: ["all", "infrastructure"]
-    command: ["--config=/etc/otelcol/config.yml"]
+    command: ["--config=/etc/otel-collector-config.yml"]
     restart: always
     volumes:
-      - ./otel-collector-config.yaml:/etc/otelcol/config.yml
+      - ./otel-collector-config.yml:/etc/otel-collector-config.yml
     ports:
       - "4317:4317"   # OTLP gRPC
       #- "4318:4318"    # OTLP HTTP receiver
@@ -51,7 +54,7 @@ services:
 
   jaeger:
     container_name: jaeger
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/jaeger:2.13.0
     profiles: ["all", "infrastructure"]
     restart: always
     healthcheck:
@@ -63,6 +66,8 @@ services:
       - telemetry
       # dashboard
       - traefik
+    ports:
+      - "16686:16686"
     labels:
       - "traefik.enable=true"      
       # dashboard

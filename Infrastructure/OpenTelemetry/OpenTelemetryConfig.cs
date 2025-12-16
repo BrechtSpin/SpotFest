@@ -6,7 +6,6 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Exporter;
-using static System.Net.WebRequestMethods;
 
 namespace Infrastructure.OpenTelemetry;
 
@@ -15,7 +14,7 @@ public static class OpenTelemetryService
     private static readonly string _serviceName = Assembly.GetEntryAssembly()?.GetName().Name!;
     public static IServiceCollection AddOpenTelemetryService(
     this IServiceCollection services,
-        string otlpEndpoint = "http://otel-collector:4317")
+        string otlpEndpoint = "http://localhost:4317")
     {
         services.AddOpenTelemetry()
             .ConfigureResource(res => res.AddService(_serviceName))
@@ -31,6 +30,7 @@ public static class OpenTelemetryService
                         options.RecordException = true;
                     })
                     .AddEntityFrameworkCoreInstrumentation()
+                    .AddSource("MassTransit")
                     .AddMassTransitInstrumentation()
                     .AddOtlpExporter(options =>
                     {

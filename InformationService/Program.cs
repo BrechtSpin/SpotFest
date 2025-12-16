@@ -1,7 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using Infrastructure.OpenTelemetry;
 using InformationService.Services;
 using InformationService.Data.Repositories;
 using InformationService.Endpoints;
-using Microsoft.EntityFrameworkCore;
 using InformationService.Extension;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddEnvironmentSettings();
 builder.Services.AddScoped<IContactServices,ContactServices>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddEmailRateLimiter();
+
+builder.Services.AddOpenTelemetryService();
 
 #if DEBUG
 
