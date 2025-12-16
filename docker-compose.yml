@@ -65,8 +65,6 @@ services:
       # dashboard
       - "traefik.http.services.jaeger-ui.loadbalancer.server.port=16686"
       - "traefik.http.routers.jaeger-ui.rule=Host(`${ALTDOMAIN}`) && PathPrefix(`/jaeger`)"
-      - "traefik.http.routers.jaeger-ui.middlewares=jaeger-ui-strip"
-      - "traefik.http.middlewares.jaeger-ui-strip.stripprefix.prefixes=/jaeger"
       - "traefik.http.routers.jaeger-ui.entrypoints=websecure"
       - "traefik.http.routers.jaeger-ui.tls=true"
       - "traefik.http.routers.jaeger-ui.tls.certresolver=myresolver"
@@ -74,6 +72,9 @@ services:
       # auth
       - "traefik.http.routers.jaeger-ui.middlewares=jaeger-ui-auth"
       - "traefik.http.middlewares.jaeger-ui-auth.basicauth.users=${JAEGER_AUTH_USER}:${JAEGER_AUTH_HASH}"
+    environment:
+      - QUERY_BASE_PATH=/jaeger
+      - JAEGER_UI_BASE_PATH=/jaeger
 
   prometheus:
     image: prom/prometheus:latest
