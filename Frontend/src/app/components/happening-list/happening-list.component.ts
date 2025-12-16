@@ -61,19 +61,19 @@ export class HappeningListComponent {
   }
 
   happeningsResource = resource<HappeningSummary[], SearchParameters>({
-    request: () => {
+    params: () => {
       const [year, month] = this.dateInput().split('-').map(Number);
       return { Year: year, Month: month, Index: this.index() };
     },
-    loader: async ({ request }) => {
-      if (request.Month < 1 || request.Month > 12 || request.Index < 0) {
+    loader: async ({ params }) => {
+      if (params.Month < 1 || params.Month > 12 || params.Index < 0) {
         return [];
       }
       return await lastValueFrom(
         this.happeningService.getHappeningsByYearMonth(
-          request.Year,
-          request.Month,
-          request.Index
+          params.Year,
+          params.Month,
+          params.Index
         )
       );
     },

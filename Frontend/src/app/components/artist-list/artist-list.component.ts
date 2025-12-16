@@ -48,16 +48,16 @@ export class ArtistListComponent {
   }
 
   artistsResource = resource<ArtistSummary[], SearchParameters>({
-    request: () => ({
+    params: () => ({
       Query: this.query(),
       Index: this.index(),
     }),
-    loader: async ({ request }) => {
-      if (request.Query === '') return [];
+    loader: async ({ params }) => {
+      if (params.Query === '') return [];
       return await lastValueFrom(
         this.artistService.GetArtistsBySearch(
-          request.Query,
-          request.Index)
+          params.Query,
+          params.Index)
       )
     },
     defaultValue: [] as ArtistSummary[],

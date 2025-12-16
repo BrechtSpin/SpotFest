@@ -39,17 +39,17 @@ export class ArtistDetailsComponent {
   guidLookupError = signal<string | null>(null);
 
   artistResource = resource<ArtistWithMetrics | null, string | null>({
-    request: () => this.artistRouteGuid(),
-    loader: async ({ request }) => {
-      if (!request) {
+    params: () => this.artistRouteGuid(),
+    loader: async ({ params }) => {
+      if (!params) {
         return null;
       }
       const [artist, happenings] = await Promise.all([
         firstValueFrom(
-          this.artistService.getArtistWithMetricsByGuid(request, this.artistRouteName() ?? '')
+          this.artistService.getArtistWithMetricsByGuid(params, this.artistRouteName() ?? '')
         ),
         firstValueFrom(
-          this.happeningService.getHappeningsOfArtist(request)
+          this.happeningService.getHappeningsOfArtist(params)
         )
       ]);
       return { ...artist, artistHappenings: happenings };

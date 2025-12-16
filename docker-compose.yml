@@ -15,7 +15,7 @@ services:
       - spotfest
       # dashboard
       - traefik
-    ports:    
+    ports:
       - "5672:5672"
       - "15672:15672"
     labels:
@@ -69,7 +69,7 @@ services:
     ports:
       - "16686:16686"
     labels:
-      - "traefik.enable=true"      
+      - "traefik.enable=true"
       # dashboard
       - "traefik.http.services.jaeger-ui.loadbalancer.server.port=16686"
       - "traefik.http.routers.jaeger-ui.rule=Host(`${ALTDOMAIN}`) && PathPrefix(`/jaeger`)"

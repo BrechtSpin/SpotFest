@@ -28,9 +28,9 @@ export class HappeningDetailComponent {
   );
 
   happeningResource = resource<HappeningFull, string | null>({
-    request: () => this.slug(),
-    loader: ({ request, abortSignal }) => {
-      const obs$ = this.happeningService.getHappeningFull(request).pipe(
+    params: () => this.slug(),
+    loader: ({ params, abortSignal }) => {
+      const obs$ = this.happeningService.getHappeningFull(params).pipe(
         takeUntil(fromEvent(abortSignal, 'abort'))
       );
       return lastValueFrom(obs$);
