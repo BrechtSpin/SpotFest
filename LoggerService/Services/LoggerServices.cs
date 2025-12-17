@@ -2,8 +2,7 @@
 using LoggerService.Data.Repositories;
 using LoggerService.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Threading;
+using System.Diagnostics;
 
 namespace LoggerService.Services;
 
@@ -15,15 +14,16 @@ public class LoggerServices(
 
     public async Task ChangeLogMessageReceived(ChangeLogMessage message)
     {
+        Guid.TryParse(Activity.Current?.GetBaggageItem(BaggageKeys.UserGuid), out Guid changedBy);
         var changeLog = new ChangeLog
         {
             EntityType = message.EntityType,
             EntityId = message.EntityId,
             Operation = message.Operation,
-            ChangedBy = message.ChangedBy,
+            ChangedBy = changedBy,
             ChangedAt = message.ChangedAt,
-            CorrelationId = message.CorrelationId,
-            PropertyChanges = message.PropertyChanges.Select(pc => new PropertyChange
+            CorrelationId = Activity.Current?.TraceId.ToString(),
+            PropertyChanges = message.PropertyChanges!.Select(pc => new PropertyChange
             {
                 PropertyName = pc.PropertyName,
                 OldValue = pc.OldValue,
@@ -36,11 +36,11 @@ public class LoggerServices(
 
     public async Task<List<ChangeLog>> GetChangeLogsByUserAsync(string guid)
     {
-        if (Guid.TryParse(guid, out Guid userId))
+        if (Guid.TryParse(guid, out Guid userGuid))
         {
             return await _loggerContext.ChangeLogs
                 .Include(cl => cl.PropertyChanges)
-                .Where(cl => cl.ChangedBy == userId)
+                .Where(cl => cl.ChangedBy == userGuid)
                 .OrderByDescending(cl => cl.ChangedAt)
                 .ToListAsync();
         }

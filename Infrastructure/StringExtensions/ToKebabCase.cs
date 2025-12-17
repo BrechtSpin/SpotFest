@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Contracts.Utils;
+namespace Infrastructure.StringExtensions;
 public static class StringExtensions
 {
     public static string ToKebabCase(this string str)

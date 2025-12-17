@@ -6,6 +6,8 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Exporter;
+using MassTransit.Logging;
+using Contracts;
 
 namespace Infrastructure.OpenTelemetry;
 
@@ -25,12 +27,13 @@ public static class OpenTelemetryService
                     {
                         options.RecordException = true;
                     })
+                    .AddSource(BaggageKeys.UserGuid)                 // custom baggagekey
                     .AddHttpClientInstrumentation(options =>
                     {
                         options.RecordException = true;
                     })
                     .AddEntityFrameworkCoreInstrumentation()
-                    .AddSource("MassTransit")
+                    .AddSource(DiagnosticHeaders.DefaultListenerName) // MassTransit ActivitySource
                     .AddMassTransitInstrumentation()
                     .AddOtlpExporter(options =>
                     {
@@ -44,7 +47,7 @@ public static class OpenTelemetryService
                     //.AddProcessInstrumentation()        // OS/platform/container                                                        
                     //.AddRuntimeInstrumentation()        // CLR of this service
                     .AddAspNetCoreInstrumentation()     // inbound API calls
-                    .AddHttpClientInstrumentation()     // outbound calls
+                    .AddHttpClientInstrumentation()     // outbound http calls
                     .AddMeter("MassTransit")
                     .AddOtlpExporter(options =>
                     {

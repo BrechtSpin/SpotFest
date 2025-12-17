@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using HappeningService.Messaging;
-using System.Security.Claims;
 
 namespace HappeningService.Data.Interceptors;
 
@@ -38,8 +37,6 @@ public class ChangeLogInterceptor(
     {
         if (context is not null)
         {
-            var httpContextAccessor = _serviceProvider.GetService<IHttpContextAccessor>();
-            var userId = GetCurrentUserId(httpContextAccessor);
             changeLogs.Clear();
 
             foreach (var entry in context.ChangeTracker.Entries())
@@ -48,7 +45,7 @@ public class ChangeLogInterceptor(
                     entry.State == EntityState.Modified ||
                     entry.State == EntityState.Deleted)
                 {
-                    var changeLog = CreateChangeLog(entry, userId);
+                    var changeLog = CreateChangeLog(entry);
                     if (changeLog != null)
                     {
                         changeLogs.Add(changeLog);
@@ -59,13 +56,11 @@ public class ChangeLogInterceptor(
     }
 
     private static ChangeLogMessage? CreateChangeLog(
-        EntityEntry entry,
-        Guid? userId)
+        EntityEntry entry)
     {
         var entityId = GetEntityId(entry);
         if (entityId == null) return null;
 
-        if (userId == null) return null;
 
         var operation = entry.State switch
         {
@@ -83,7 +78,6 @@ public class ChangeLogInterceptor(
             EntityType = entry.Entity.GetType().Name,
             EntityId = entityId,
             Operation = operation.Value,
-            ChangedBy = (Guid)userId,
             ChangedAt = DateTime.UtcNow,
             PropertyChanges = propertyChanges
         };
@@ -135,13 +129,12 @@ public class ChangeLogInterceptor(
 
         if (keyProperties.Count == 0) return null;
 
-        // Handle composite keys
         if (keyProperties.Count == 1)
         {
             return keyProperties[0].CurrentValue?.ToString();
         }
 
-        // For composite keys, join with a separator
+        //composite keys
         var keyValues = keyProperties
             .Select(p => p.CurrentValue?.ToString() ?? "null");
         return string.Join("|", keyValues);
@@ -159,14 +152,6 @@ public class ChangeLogInterceptor(
             DateTimeOffset dto => dto.ToString("O"),
             _ => JsonSerializer.Serialize(value)
         };
-    }
-
-    private static Guid? GetCurrentUserId(IHttpContextAccessor? httpContextAccessor)
-    {
-        var userIdClaim = httpContextAccessor?.HttpContext?.User
-            .FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        return Guid.TryParse(userIdClaim, out var userId) ? userId : null;
     }
 
     // post DB-saving
@@ -198,7 +183,7 @@ public class ChangeLogInterceptor(
             var publisherService = scope.ServiceProvider.GetRequiredService<IPublisherService>();
             foreach (var changeLog in changeLogs)
             {
-            await publisherService.ChangeLogMessagePublisher(changeLog);
+                await publisherService.ChangeLogMessagePublisher(changeLog);
             }
             changeLogs.Clear();
         }

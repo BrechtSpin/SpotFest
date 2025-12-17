@@ -2,6 +2,7 @@
 using HappeningService.Services;
 using HappeningService.Services.Hubs;
 using Microsoft.AspNetCore.Mvc;
+using Infrastructure.EndPointExtensions;
 
 namespace HappeningService.EndPoints;
 
@@ -12,7 +13,8 @@ public static class HappeningApi
         var group = app.MapGroup("/api/happening");
 
         group.MapPost("/new", CreateHappening)
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .AddUserContext();
         group.MapGet("", GetHappeningFullNoSlug);
         group.MapGet("/s", GetHappeningsSearch);
         group.MapGet("/{slug}", GetHappeningFull);

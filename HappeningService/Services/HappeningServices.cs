@@ -1,11 +1,10 @@
 ﻿using Contracts;
-using Contracts.Utils;
 using HappeningService.Data.Repositories;
 using HappeningService.DTO;
 using HappeningService.Messaging;
 using HappeningService.Models;
+using Infrastructure.StringExtensions;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace HappeningService.Services;
 

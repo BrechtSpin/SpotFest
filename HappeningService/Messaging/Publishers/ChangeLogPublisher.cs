@@ -1,5 +1,4 @@
 ﻿using Contracts;
-using System.Diagnostics;
 
 namespace HappeningService.Messaging;
 
