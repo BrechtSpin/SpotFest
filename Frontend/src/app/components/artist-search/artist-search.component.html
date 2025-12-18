@@ -1,41 +1,17 @@
-@if (!selectedArtist()) {
-
-<div class="d-flex align-items-center">
-  <input type="text"
-         [value]="searchName()"
-         (input)="onInput($event)"
-         placeholder="Search for artist..."
-         class="form-control mb-2" />
-  <button type="button" (click)="onDeleteClick()" class="btn btn-danger align-self-start ms-2">Delete</button>
-</div>
-
-  @if (artists().length > 0) {
-<ul class="list-group">
-  @for (artist of artists(); track artist.spotifyId) {
-  <li class="list-group-item d-flex flex-row align-items-center"
-      (click)="selectArtist(artist)"
-      [style.cursor]="'pointer'">
-    <img src="{{artist.thumbnail}}"
-         (error)="artist.thumbnail = 'questionmark.512.png'"
-         width="50"
-         height="50"
-         class="rounded me-3" />
-    {{ artist.name }}
-  </li>
-  }
-</ul>
-  }
-  }
-
-  @if (selectedArtist()) {
-<div class="d-flex align-items-center justify-content-between ms-2">
-  <div>
-    <img src="{{selectedArtist()?.thumbnail}}"
-         width="50"
-         height="50"
-         class="rounded me-3" />
-    {{ selectedArtist()?.name }}
+<div class="d-flex flex-column align-items-center">
+  @for (artistCtrl of happeningArtists.controls; let i = $index; track artistCtrl) {
+  <div class="mb-2">
+    @if (happeningArtists.at(i).get('spotifyId')?.invalid
+    && happeningArtists.at(i).get('spotifyId')?.touched){
+    <div class="text-danger">Search and pick an artist from the list or remove it.</div>
+    }
+    <app-artist-input-search (artistSelected)="onArtistSelected($event, i)"
+                       (deleteMe)="onArtistRemove(i)">
+      [class.is-invalid]="happeningArtists.at(i).get('spotifyId')?.invalid
+      && happeningArtists.at(i).get('spotifyId')?.touched">
+      >
+    </app-artist-input-search>
   </div>
-  <button type="button" (click)="onDeleteClick()" class="btn btn-danger">Delete</button>
-</div>
   }
+  <button type="button" (click)="addArtist()" class="btn btn-secondary">Add Artist</button>
+</div>

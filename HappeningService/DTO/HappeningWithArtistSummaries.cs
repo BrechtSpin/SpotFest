@@ -5,6 +5,7 @@ namespace HappeningService.DTO;
 
 public record HappeningWithArtistSummaries
 {
+    public required Guid Guid { get; set; }
     public required string Name { get; set; }
     public required string Slug { get; set; }
     public ArtistSummary[] ArtistSummaries { get; set; } = [];

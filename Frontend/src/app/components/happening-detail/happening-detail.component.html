@@ -1,4 +1,4 @@
-<div>
+<div class="d-flex flex-column align-items-center">
   @if (loading()) {
   <p>Loading…</p>
   } @else if (error()) {
@@ -9,7 +9,7 @@
     <p class="date">{{ happening().startDate | date:'longDate' }}</p>
   </section>
 
-  <div class="artist-list">
+  <div class="artist-list d-flex justify-content-center">
     @for (artist of happening().artistSummaries; track artist) {
     <app-artist-summary [guid]="artist.guid"
                         [name]="artist.name"
@@ -17,5 +17,9 @@
     </app-artist-summary>
     }
   </div>
+  <app-happening-add-artist class="d-flex justify-content-center pt-5"
+                            [guid]="happening().guid"
+                            (refreshRequested)="refresh()">
+  </app-happening-add-artist>
   }
 </div>

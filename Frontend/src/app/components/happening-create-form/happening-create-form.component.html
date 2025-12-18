@@ -1,5 +1,5 @@
 
-<form [formGroup]="happeningForm" (ngSubmit)="submit()" style="width: 240px">
+<form [formGroup]="happeningForm" (ngSubmit)="submit()" class="d-flex flex-column" style="width: 240px">
 
   <div class="mb-4">
     <label for="name" class="form-label"
@@ -36,22 +36,8 @@
   </div>
 
   <div formArrayName="happeningArtists" class="mb-3">
-    <h5>Artists</h5>
-    @for (artistCtrl of happeningArtists.controls; let i = $index; track artistCtrl) {
-    <div [formGroupName]="i" class="mb-2">
-      @if (happeningArtists.at(i).get('spotifyId')?.invalid
-      && happeningArtists.at(i).get('spotifyId')?.touched){
-      <div class="text-danger">Search and pick an artist from the list or remove it.</div>
-      }
-      <app-artist-search (artistSelected)="onArtistSelected($event, i)"
-                         (deleteMe)="onArtistRemove(i)">
-        [class.is-invalid]="happeningArtists.at(i).get('spotifyId')?.invalid
-        && happeningArtists.at(i).get('spotifyId')?.touched">
-        >
-      </app-artist-search>
-    </div>
-    }
-    <button type="button" (click)="addArtist()" class="btn btn-secondary">Add Artist</button>
+    <h5 class="text-center">Artists</h5>
+    <app-artist-search></app-artist-search>
   </div>
   <button type="submit"
           class="mt-4 px-4 py-2 rounded shadow">

@@ -1,0 +1,17 @@
+<div class="pb-5 mb-5">
+  @if(loading){
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="spinner-border text-primary">
+    </div>
+  </div>
+  } @else{
+  <p class="mb-3">Did we miss any artists? Add them!</p>
+  <form [formGroup]="happeningForm" (ngSubmit)="submit()" class="d-flex flex-column align-items-center">
+    <app-artist-search></app-artist-search>
+    <button type="submit"
+            class="d-flex mt-4 px-4 py-2 rounded shadow">
+      Add these artists
+    </button>
+  </form>
+  }
+</div>

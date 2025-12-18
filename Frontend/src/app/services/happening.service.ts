@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '@env/environment';
-import { CreateHappening } from '@models/create-happening';
+import { CreateHappening, UpdateHappeningWithArtists } from '@models/happening-modify';
 import { HappeningFull } from '@models/happening-full';
 import { HappeningSummary } from '@models/happening-summary';
 
@@ -11,11 +11,9 @@ import { HappeningSummary } from '@models/happening-summary';
   providedIn: 'root'
 })
 export class HappeningService {
-  private Url = `${environment.apiHappeningUrl}`;
+  private http = inject(HttpClient);
 
-  constructor(
-    private http: HttpClient
-  ) { }
+  private Url = `${environment.apiHappeningUrl}`;
 
   getHappeningFull(slug: string | null): Observable<HappeningFull> {
     if (!slug) {
@@ -27,6 +25,10 @@ export class HappeningService {
 
   createHappening(createHappening: CreateHappening): Observable<{ slug: string }> {
     return this.http.post<{ slug: string }>(`${this.Url}/new`, createHappening);
+  }
+
+  updateHappeningWithArtists(updateHappeningWithArtists: UpdateHappeningWithArtists) {
+    return this.http.post(`${this.Url}/update`, updateHappeningWithArtists)
   }
 
   getHappeningsOfArtist(guid: string): Observable<HappeningSummary[]> {

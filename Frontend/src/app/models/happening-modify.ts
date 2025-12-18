@@ -6,3 +6,8 @@ export interface CreateHappening {
   endDate: string;
   happeningArtists: HappeningArtist[];
 }
+
+export interface UpdateHappeningWithArtists {
+  guid: string;
+  addHappeningArtists: HappeningArtist[];
+}

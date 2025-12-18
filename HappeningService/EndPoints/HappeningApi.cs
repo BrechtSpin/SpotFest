@@ -15,6 +15,9 @@ public static class HappeningApi
         group.MapPost("/new", CreateHappening)
             .RequireAuthorization()
             .AddUserContext();
+        group.MapPost("/update", UpdateHappening)
+            .RequireAuthorization()
+            .AddUserContext();
         group.MapGet("", GetHappeningFullNoSlug);
         group.MapGet("/s", GetHappeningsSearch);
         group.MapGet("/{slug}", GetHappeningFull);
@@ -30,6 +33,13 @@ public static class HappeningApi
         var Slug = await service.CreateHappeningAsync(dto);
         await currentTimeframeService.OnChangedDataAsync();
         return Results.Created($"/happening/{Slug}", new { slug = Slug });
+    }
+    private static async Task<IResult> UpdateHappening(
+        IHappeningServices service,
+        UpdateHappeningDTO dto)
+    {
+        await service.UpdateHappeningAsync(dto);
+        return Results.Ok();
     }
     private static async Task<IResult> GetHappeningFullNoSlug(
         IHappeningServices service)

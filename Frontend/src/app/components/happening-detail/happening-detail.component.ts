@@ -7,12 +7,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HappeningService } from '@services/happening.service';
 import { HappeningFull } from '@models/happening-full';
 import { ArtistSummaryComponent } from '@components/artist-summary/artist-summary.component';
-import { NotFound404Component } from '../404/404-not-found';
+import { HappeningAddArtistComponent } from '@components/happening-add-artist/happening-add-artist.component';
+import { NotFound404Component } from '@components/404/404-not-found';
 
 @Component({
   selector: 'app-happening-detail',
   standalone: true,
-  imports: [CommonModule, NotFound404Component, ArtistSummaryComponent],
+  imports: [CommonModule, NotFound404Component, ArtistSummaryComponent, HappeningAddArtistComponent],
   templateUrl: './happening-detail.component.html',
   styleUrls: ['./happening-detail.component.css'],
 })
@@ -27,6 +28,8 @@ export class HappeningDetailComponent {
     { initialValue: null }
   );
 
+
+  refreshTrigger = signal(0);
   happeningResource = resource<HappeningFull, string | null>({
     params: () => this.slug(),
     loader: ({ params, abortSignal }) => {
@@ -36,6 +39,9 @@ export class HappeningDetailComponent {
       return lastValueFrom(obs$);
     }
   });
+  refresh() {
+    this.refreshTrigger.update(v => v + 1);
+  }
 
   happening = computed<HappeningFull>(() => {
     const val = this.happeningResource.value()

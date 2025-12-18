@@ -130,6 +130,7 @@ public class ArtistServices(ArtistServiceContext context, IPublisherService publ
                     Name = incompleteHappeningArtist.Name,
                     SpotifyId = incompleteHappeningArtist.SpotifyId,
                 });
+            //silent fail, this is unresolvable
             if (response.SpotifyId == "") return;
             artist = new Artist
             {

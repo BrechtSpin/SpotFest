@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -33,31 +33,8 @@ export class HappeningCreateFormComponent {
     return ctrl.invalid && (ctrl.touched || this.submitted);
   }
 
-  get happeningArtists() {
+  get happeningArtists(): FormArray  {
     return this.happeningForm.get('happeningArtists') as FormArray;
-  }
-
-  addArtist() {
-    this.happeningArtists.push(this.fb.group({
-      name: [''],
-      spotifyId: ['', Validators.required]
-    }));
-  }
-
-  removeArtist(index: number) {
-    this.happeningArtists.removeAt(index);
-  }
-
-  onArtistSelected(artist: HappeningArtist, index: number) {
-    this.happeningArtists.at(index).patchValue({
-      spotifyId: artist.spotifyId,
-      name: artist.name
-    })
-    console.log(this.happeningArtists.value)
-  }
-
-  onArtistRemove(index: number) {
-    this.happeningArtists.removeAt(index)
   }
 
   submit() {

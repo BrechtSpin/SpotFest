@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
 
       if (msg === 'login-required') {
         this.alertType = 'warning';
-        this.alertMessage = 'You must be logged in to access that page.';
+        this.alertMessage = 'You must be logged in to use this feature.';
       }
     });
   }

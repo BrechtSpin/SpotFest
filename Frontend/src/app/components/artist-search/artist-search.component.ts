@@ -1,50 +1,39 @@
 import { Component, effect, signal, inject, Output, EventEmitter, OnInit } from '@angular/core';
 import { ArtistService } from '@services/artist.service'
 import { HappeningArtist } from '@models/happening-artist';
+import { FormArray, FormBuilder, FormGroup, FormGroupDirective, FormRecord, Validators } from '@angular/forms';
+import { ArtistSearchInputComponent } from './artist-search-input.component';
 
 @Component({
   selector: 'app-artist-search',
   standalone: true,
+  imports: [ArtistSearchInputComponent],
   templateUrl: './artist-search.component.html'
 })
 export class ArtistSearchComponent {
-  private artistService = inject(ArtistService);
-  constructor() {
-    effect(() => {  //Search
-      const query = this.searchName();
-      if (query.length > 2) {
-        this.artistService.getArtistByNameSpotify(query).subscribe((results) => {
-          console.log('Raw results from getArtistByNameSpotify:', results);
-          this.artists.set(results.slice(0, 5));
-        });
-      } else {
-        this.artists.set([]);
-      }
-    }
-    );
-  }
+  private fb = inject(FormBuilder);
+  private parent = inject(FormGroupDirective)
 
-  searchName = signal('');
 
-  artists = signal<HappeningArtist[]>([]);
-  selectedArtist = signal<HappeningArtist | null>(null);
-  error = signal<string | null>(null);
+  get happeningArtists(): FormArray{
+  return this.parent.form.get('happeningArtists') as FormArray;
+}
 
-  @Output() artistSelected = new EventEmitter<HappeningArtist>();
+addArtist() {
+  this.happeningArtists.push(this.fb.group({
+    name: [''],
+    spotifyId: ['', Validators.required]
+  }));
+}
 
-  onInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.searchName.set(input.value);
-  }
+onArtistRemove(index: number) {
+  this.happeningArtists.removeAt(index)
+}
 
-  selectArtist(artist: any) {
-    this.selectedArtist.set(artist);
-    this.artistSelected.emit(artist);
-  }
-
-  @Output() deleteMe = new EventEmitter<void>();
-
-  onDeleteClick() {
-    this.deleteMe.emit();
-  }
+onArtistSelected(artist: HappeningArtist, index: number) {
+  this.happeningArtists.at(index).patchValue({
+    spotifyId: artist.spotifyId,
+    name: artist.name
+  })
+}
 }

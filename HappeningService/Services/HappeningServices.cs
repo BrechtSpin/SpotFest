@@ -55,6 +55,7 @@ public class HappeningServices(HappeningContext happeningContext,
                      .ToArray());
         return new HappeningWithArtistSummaries
         {
+            Guid = happening.Guid,
             Name = happening.Name,
             Slug = happening.Slug,
             StartDate = happening.StartDate,
@@ -76,15 +77,7 @@ public class HappeningServices(HappeningContext happeningContext,
         _happeningContext.Happenings.Add(happening);
         await _happeningContext.SaveChangesAsync();
 
-        foreach (HappeningArtistIncompleteDTO hapArt in createHappeningDTO.HappeningArtists)
-        {
-            await _publisherService.HappeningArtistIncompletePublisher(new HappeningArtistIncomplete
-            {
-                HappeningGuid = happening.Guid,
-                SpotifyId = hapArt.Spotifyid ?? "",
-                Name = hapArt.Name
-            });
-        }
+        await HappeningArtistsTryAddIncomplete(createHappeningDTO.HappeningArtists, happening.Guid);
 
         return happening.Slug;
     }
@@ -100,6 +93,25 @@ public class HappeningServices(HappeningContext happeningContext,
         _happeningContext.HappeningArtists.Add(NewHA);
         await _happeningContext.SaveChangesAsync();
     }
+    public async Task UpdateHappeningAsync(UpdateHappeningDTO updateHappeningDTO)
+    {
+        if(!Guid.TryParse(updateHappeningDTO.Guid, out var guid)) return;
+        await HappeningArtistsTryAddIncomplete(updateHappeningDTO.HappeningArtists, guid);
+    }
+    private async Task HappeningArtistsTryAddIncomplete(
+        List<HappeningArtistIncompleteDTO> HAList,
+            Guid happeningGuid)
+    {
+        foreach (HappeningArtistIncompleteDTO hapArt in HAList)
+        {
+            await _publisherService.HappeningArtistIncompletePublisher(new HappeningArtistIncomplete
+            {
+                HappeningGuid = happeningGuid,
+                SpotifyId = hapArt.Spotifyid ?? "",
+                Name = hapArt.Name
+            });
+        }
+    }
     public async Task<HappeningSummaryDTO[]> GetHappeningsOfArtistAsync(string artistGuid)
     {
         Guid guid = Guid.Parse(artistGuid);
@@ -112,7 +124,7 @@ public class HappeningServices(HappeningContext happeningContext,
         return Array.ConvertAll(
             happeningArtists,
             a => new HappeningSummaryDTO
-            {                
+            {
                 Name = a.Happening.Name,
                 Slug = a.Happening.Slug,
                 StartDate = a.Happening.StartDate,
@@ -126,7 +138,7 @@ public class HappeningServices(HappeningContext happeningContext,
         var end = start.AddMonths(1);
         var happenings = await _happeningContext.Happenings
             .OrderBy(h => h.StartDate)
-            .Where(h => h.StartDate >= start && h.StartDate < end)            
+            .Where(h => h.StartDate >= start && h.StartDate < end)
             .Skip(index)
             .Take(10)
             .ToArrayAsync();
@@ -139,6 +151,6 @@ public class HappeningServices(HappeningContext happeningContext,
                 StartDate = h.StartDate,
                 EndDate = h.EndDate,
             });
-            
+
     }
 }
