@@ -82,7 +82,8 @@ public class SpotifyWebApiClient : ISpotifyWebApiClient
     {
         var message = await GetSpotifyRequestAsync(
             $"{ApiUri}/artists/{spotifyId}");
-        return JsonSerializer.Deserialize(message, SerializerContext.Default.SpotifyArtist)!;
+        var spotifyArtist = JsonSerializer.Deserialize(message, SerializerContext.Default.SpotifyArtist)!;
+        return spotifyArtist;
     }
     public async Task<List<SpotifyArtist>> GetArtistsByNameAsync(string artistName, int amount = 5)
     {

@@ -24,8 +24,9 @@ public class SpotifyHarvester(
             {
                 ArtistGuid = artistIdMap.ArtistGuid,
                 Date = DateTime.UtcNow,
-                Followers = artistData.Followers.total,
-                Popularity = artistData.Popularity,
+                //9/3/2026 deprecated fields from spotify. may come back later? unlikely
+                //Followers = artistData.Followers.total,
+                //Popularity = artistData.Popularity,
                 Listeners = listeners
             };
             await _publisherService.ArtistMetricDataResponsePublisher(NewMetric);

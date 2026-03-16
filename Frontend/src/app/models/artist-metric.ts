@@ -1,6 +1,7 @@
 export interface ArtistMetric {
   date: string; // ISO string
-  followers: number;
-  popularity: number;
+  //9/3/2026 deprecated fields from spotify. may come back later? unlikely
+  //followers: number;
+  //popularity: number;
   listeners: number;
 }

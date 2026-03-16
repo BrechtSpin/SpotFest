@@ -6,8 +6,11 @@ public record ArtistMetric
     public Guid ArtistGuid { get; set; }
     public DateTime Date { get; set; }
     public DateTime DateDay { get; private set; }
-    public required int Followers { get; set; }
-    public required int Popularity { get; set; }
+    //9/3/2026 deprecated fields from spotify. may come back later? unlikely
+    [Obsolete("deprecated fields from spotify. may come back later? unlikely")]
+    public int? Followers { get; set; }
+    [Obsolete("deprecated fields from spotify. may come back later? unlikely")]
+    public int? Popularity { get; set; }
     public long Listeners { get; set; }
     public Artist Artist { get; set; }
 }

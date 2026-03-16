@@ -75,22 +75,23 @@ export class ArtistDetailsComponent {
         })),
         happenings: artist.artistHappenings
       },
-      {
-        label: 'Followers',
-        metrics: artist.artistMetrics.map(m => ({
-          date: m.date,
-          value: m.followers
-        })),
-        happenings: artist.artistHappenings
-      },
-      {
-        label: 'Popularity',
-        metrics: artist.artistMetrics.map(m => ({
-          date: m.date,
-          value: m.popularity
-        })),
-        happenings: artist.artistHappenings
-      }
+      //9/3/2026 deprecated fields from spotify. may come back later? unlikely
+      //{
+      //  label: 'Followers',
+      //  metrics: artist.artistMetrics.map(m => ({
+      //    date: m.date,
+      //    value: m.followers
+      //  })),
+      //  happenings: artist.artistHappenings
+      //},
+      //{
+      //  label: 'Popularity',
+      //  metrics: artist.artistMetrics.map(m => ({
+      //    date: m.date,
+      //    value: m.popularity
+      //  })),
+      //  happenings: artist.artistHappenings
+      //}
     ];
   })
 

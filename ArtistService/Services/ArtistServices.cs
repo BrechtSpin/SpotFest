@@ -39,13 +39,14 @@ public class ArtistServices(ArtistServiceContext context, IPublisherService publ
         {
             Guid = artistMetric.Guid,
             ArtistGuid = artistMetric.ArtistGuid,
-            Followers = artistMetric.Followers,
+            //9/3/2026 deprecated fields from spotify. may come back later? unlikely
+            //Followers = artistMetric.Followers,
+            //Popularity = artistMetric.Popularity,
             Listeners = artistMetric.Listeners,
-            Popularity = artistMetric.Popularity,
             Date = artistMetric.Date,
         });
         await _context.SaveChangesAsync();
-    }
+        }
 
     public async Task<ArtistSummary[]> ArtistSummariesFromGuids(Guid[] guids)
     {
@@ -109,8 +110,9 @@ public class ArtistServices(ArtistServiceContext context, IPublisherService publ
             .Select(am => new ArtistMetricDTO
             {
                 Date = am.Date,
-                Followers = am.Followers,
-                Popularity = am.Popularity,
+                //9/3/2026 deprecated fields from spotify. may come back later? unlikely
+                //Followers = am.Followers,
+                //Popularity = am.Popularity,
                 Listeners = am.Listeners
             })
             .OrderBy(am => am.Date)
