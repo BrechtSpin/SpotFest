@@ -16,11 +16,11 @@
 
     @if (!loading()) {
     <div>
-      @if (pastHappenings().length > 0){
+      @if (futureHappenings().length > 0) {
       <div>
-        <h6>Wrapped Up Happenings</h6>
+        <h6>Upcoming Happenings </h6>
         <div class="list-group">
-          @for(happening of pastHappenings(); track happening.slug){
+          @for (happening of futureHappenings(); track happening.slug){
           <a [routerLink]="['/happening', happening.slug]"
              routerLinkActive="active"
              [routerLinkActiveOptions]="{ exact: true }"
@@ -32,6 +32,7 @@
         </div>
       </div>
       }
+
       <br />
 
       @if (currentHappenings().length > 0) {
@@ -50,13 +51,14 @@
         </div>
       </div>
       }
+
       <br />
 
-      @if (futureHappenings().length > 0) {
+      @if (pastHappenings().length > 0){
       <div>
-        <h6>Upcoming Happenings </h6>
+        <h6>Wrapped Up Happenings</h6>
         <div class="list-group">
-          @for (happening of futureHappenings(); track happening.slug){
+          @for(happening of pastHappenings(); track happening.slug){
           <a [routerLink]="['/happening', happening.slug]"
              routerLinkActive="active"
              [routerLinkActiveOptions]="{ exact: true }"
@@ -68,6 +70,7 @@
         </div>
       </div>
       }
+
     </div>
     }
 
@@ -86,9 +89,9 @@
     </button>
 
     @if(isCollapsed()){
-      <button class="btn btn-secondary shadow add-btn" routerLink="/happening/add">
-        +
-      </button>
+    <button class="btn btn-secondary shadow add-btn" routerLink="/happening/add">
+      +
+    </button>
     }
   </aside>
 </div>

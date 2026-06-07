@@ -1,7 +1,6 @@
 ﻿using DataHarvester.Messaging;
 using Contracts;
 using DataHarvester.Models;
-using Jint.Parser.Ast;
 
 namespace DataHarvester.SpotifyWeb;
 
@@ -18,17 +17,19 @@ public class SpotifyHarvester(
     {
         if (artistIdMap is not null && artistIdMap.SpotifyId is not null)
         {
-            var artistData = await _webAPI.GetArtistAsync(artistIdMap.SpotifyId);
-            var listeners = await _scraper.GetListenersAsync(artistIdMap.SpotifyId);
-            var NewMetric = new ArtistMetric
-            {
-                ArtistGuid = artistIdMap.ArtistGuid,
-                Date = DateTime.UtcNow,
-                //9/3/2026 deprecated fields from spotify. may come back later? unlikely
-                //Followers = artistData.Followers.total,
-                //Popularity = artistData.Popularity,
-                Listeners = listeners
-            };
+            //var artistData = await _webAPI.GetArtistAsync(artistIdMap.SpotifyId);
+            var metrics = await _scraper.GetMetricsAsync(artistIdMap.SpotifyId);
+                var NewMetric = new ArtistMetric
+                {
+                    Guid = Guid.NewGuid(),
+                    ArtistGuid = artistIdMap.ArtistGuid,
+                    Date = DateTime.UtcNow,
+                    //9/3/2026 deprecated fields from spotify. may come back later? unlikely
+                    //Popularity = artistData.Popularity,
+                    Listeners = metrics.listeners,
+                    Followers = metrics.followers
+
+                };
             await _publisherService.ArtistMetricDataResponsePublisher(NewMetric);
         }
     }
@@ -59,5 +60,4 @@ public class SpotifyHarvester(
         };
         return response;
     }
-
 }

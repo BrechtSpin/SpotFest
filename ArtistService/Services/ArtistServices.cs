@@ -40,9 +40,9 @@ public class ArtistServices(ArtistServiceContext context, IPublisherService publ
             Guid = artistMetric.Guid,
             ArtistGuid = artistMetric.ArtistGuid,
             //9/3/2026 deprecated fields from spotify. may come back later? unlikely
-            //Followers = artistMetric.Followers,
             //Popularity = artistMetric.Popularity,
             Listeners = artistMetric.Listeners,
+            Followers = artistMetric.Followers,
             Date = artistMetric.Date,
         });
         await _context.SaveChangesAsync();

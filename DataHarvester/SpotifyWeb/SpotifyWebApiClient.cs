@@ -1,10 +1,5 @@
 ﻿using DataHarvester.Models;
-using MassTransit;
-using System.Threading.Tasks;
-using MassTransit.JobService.Messages;
 using Polly;
-using Polly.Retry;
-using System;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -38,10 +33,20 @@ public class SpotifyWebApiClient : ISpotifyWebApiClient
                 MaxRetryAttempts = 5,
                 DelayGenerator = args =>
                 {
+                    TimeSpan delay = TimeSpan.Zero;
                     var jitter = Jitterer.NextDouble() + 1; //1 to 2
-                    return new ValueTask<TimeSpan?>(
-                        TimeSpan.FromSeconds(10 * jitter * Math.Pow(2, args.AttemptNumber)));
-                }
+
+                    if (args.Outcome.Result is HttpResponseMessage response &&
+                       response.StatusCode == HttpStatusCode.TooManyRequests)
+                    {
+                        if (response.Headers.RetryAfter is RetryConditionHeaderValue retryAfter)
+                        {
+                            delay += retryAfter.Delta!.Value;
+                        }
+                    }
+                    return new ValueTask<TimeSpan?>(delay +
+                        TimeSpan.FromSeconds( 10 * jitter * Math.Pow(2, args.AttemptNumber)));
+                },
             })
             .Build();
     }
@@ -52,39 +57,41 @@ public class SpotifyWebApiClient : ISpotifyWebApiClient
         using var lease = await _rateLimiter.AcquireAsync(1);
         var token = await _tokenClient.GetTokenAsync();
 
-        var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-        request.Headers.Authorization =
-            new AuthenticationHeaderValue(token.Token_type, token.Access_token);
+        HttpResponseMessage response = await _pipeline.ExecuteAsync<HttpResponseMessage>(async ct =>
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+                    request.Headers.Authorization =
+                        new AuthenticationHeaderValue(token.Token_type, token.Access_token);
 
-        var response = await _pipeline.ExecuteAsync<HttpResponseMessage>(async ct =>
-            await _httpClient.SendAsync(request, ct));
+                    return await _httpClient.SendAsync(request, ct);
+                });
 
-        switch (response.StatusCode)
-        {
-            case HttpStatusCode.OK:
-                {
-                    using StreamReader reader = new(await response.Content.ReadAsStreamAsync());
-                    return await reader.ReadToEndAsync();
-                }
-            case HttpStatusCode.BadRequest:
-                {
-                    throw new ArgumentException($"invalid Uri {requestUri}", nameof(requestUri));
-                }
-            case HttpStatusCode.NotFound:
-                {
-                    throw new KeyNotFoundException($"item not found {requestUri}");
-                }
-            default:
-                throw new NotImplementedException(response.StatusCode.ToString());
+            switch (response.StatusCode)
+            {
+                case HttpStatusCode.OK:
+                    {
+                        using StreamReader reader = new(await response.Content.ReadAsStreamAsync());
+                        return await reader.ReadToEndAsync();
+                    }
+                case HttpStatusCode.BadRequest:
+                    {
+                        throw new ArgumentException($"invalid Uri {requestUri}", nameof(requestUri));
+                    }
+                case HttpStatusCode.NotFound:
+                    {
+                        throw new KeyNotFoundException($"item not found {requestUri}");
+                    }
+                default:
+                    throw new NotImplementedException(response.StatusCode.ToString());
+            }
         }
-    }
     public async Task<SpotifyArtist> GetArtistAsync(string spotifyId)
     {
-        var message = await GetSpotifyRequestAsync(
-            $"{ApiUri}/artists/{spotifyId}");
-        var spotifyArtist = JsonSerializer.Deserialize(message, SerializerContext.Default.SpotifyArtist)!;
-        return spotifyArtist;
-    }
+            var message = await GetSpotifyRequestAsync(
+                $"{ApiUri}/artists/{spotifyId}");
+            var spotifyArtist = JsonSerializer.Deserialize(message, SerializerContext.Default.SpotifyArtist)!;
+            return spotifyArtist;
+        }
     public async Task<List<SpotifyArtist>> GetArtistsByNameAsync(string artistName, int amount = 5)
     {
         var message = await GetSpotifyRequestAsync(

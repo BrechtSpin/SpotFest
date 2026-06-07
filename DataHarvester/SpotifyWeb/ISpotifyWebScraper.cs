@@ -8,5 +8,5 @@ namespace DataHarvester.SpotifyWeb;
 
 public interface ISpotifyWebScraper
 {
-    public Task<long> GetListenersAsync(string ArtistUid);
+    public Task<(long listeners, int followers)> GetMetricsAsync(string ArtistUid);
 }
