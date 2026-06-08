@@ -110,10 +110,10 @@ public class ArtistServices(ArtistServiceContext context, IPublisherService publ
             .Select(am => new ArtistMetricDTO
             {
                 Date = am.Date,
+                Listeners = am.Listeners,
+                Followers = (long)am.Followers!,
                 //9/3/2026 deprecated fields from spotify. may come back later? unlikely
-                //Followers = am.Followers,
                 //Popularity = am.Popularity,
-                Listeners = am.Listeners
             })
             .OrderBy(am => am.Date)
             .ToArray()
