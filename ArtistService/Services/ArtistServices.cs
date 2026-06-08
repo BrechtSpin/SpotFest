@@ -111,7 +111,7 @@ public class ArtistServices(ArtistServiceContext context, IPublisherService publ
             {
                 Date = am.Date,
                 Listeners = am.Listeners,
-                Followers = (long)am.Followers!,
+                Followers = am.Followers,
                 //9/3/2026 deprecated fields from spotify. may come back later? unlikely
                 //Popularity = am.Popularity,
             })

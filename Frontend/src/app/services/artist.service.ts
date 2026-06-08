@@ -18,7 +18,8 @@ export class ArtistService {
 
   getArtistWithMetricsByGuid(guid: string, name: string | null): Observable<ArtistWithMetrics> {
     /*if (!guid) { return of(null); }*/
-    if (!name) { name = ''; }
+    /*if (!name) { name = ''; } currently unneeded*/
+    name = '';
     return this.http.get<ArtistWithMetrics>(`${this.Url}/${guid}/${name}`)
   }
   getArtistGuidByName(name: string): Observable<string> {

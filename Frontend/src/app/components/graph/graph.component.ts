@@ -58,13 +58,14 @@ export class TimelineGraphComponent implements AfterViewInit {
             fill: false,
             borderWidth: 2,
             tension: 0.5,
-            pointRadius: 0.4,        
+            pointRadius: 0.4,
           },
         ],
       },
       options: {
         responsive: true,
         animation: false,
+        spanGaps: true,
         scales: {
           x: {
             type: 'time',
@@ -72,7 +73,7 @@ export class TimelineGraphComponent implements AfterViewInit {
               parser: 'iso',      // parse ISO strings
               unit: 'day',        // bucket & tick by day
               displayFormats: {
-                day: 'd MMM' 
+                day: 'd MMM'
               },
             },
           },
@@ -106,7 +107,7 @@ export class TimelineGraphComponent implements AfterViewInit {
         hitTolerance: 12,           //sligthly wider 'hoverarea'
         label: {
           display: false,
-          content: h.name,     
+          content: h.name,
           position: 'start',
           backgroundColor: 'rgba(200,0,0,0.8)',
           color: '#fff',
