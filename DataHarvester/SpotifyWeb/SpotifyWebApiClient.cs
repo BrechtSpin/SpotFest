@@ -9,21 +9,21 @@ namespace DataHarvester.SpotifyWeb;
 
 public class SpotifyWebApiClient : ISpotifyWebApiClient
 {
-    private static readonly Random Jitterer = new();
+    private const string ApiUri = "https://api.spotify.com/v1";
     private readonly HttpClient _httpClient;
     private readonly SlidingWindowRateLimiter _rateLimiter;
     private readonly ResiliencePipeline<HttpResponseMessage> _pipeline;
-    private const string ApiUri = "https://api.spotify.com/v1";
+    private static readonly Random Jitterer = new();
     private readonly SpotifyWebApiClientTokenClient _tokenClient;
 
     public SpotifyWebApiClient(
         HttpClient httpclient,
         SpotifyWebApiClientTokenClient spotifyWebApiClientTokenClient,
-        SpotifyRateLimiter spotifyRateLimiter)
+        SpotifyWebApiRateLimiter rateLimiter)
     {
         _httpClient = httpclient;
         _tokenClient = spotifyWebApiClientTokenClient;
-        _rateLimiter = spotifyRateLimiter.GetSlidingWindowRateLimiter();
+        _rateLimiter = rateLimiter.GetSlidingWindowRateLimiter();
         _pipeline = new ResiliencePipelineBuilder<HttpResponseMessage>()
             .AddRetry(new()
             {

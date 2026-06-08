@@ -15,13 +15,13 @@ namespace SpotFestTests.DataHarvester
 
             Services = new ServiceCollection()
                 .AddSingleton<SpotifyWebApiClientTokenClient>()
-                .AddSingleton<SpotifyRateLimiter>()
+                .AddSingleton<RateLimiter>()
                 .AddHttpClient()
                 .BuildServiceProvider();
 
             _client = new SpotifyWebApiClient(Services.GetService<HttpClient>()!,
                 Services.GetService<SpotifyWebApiClientTokenClient>()!,
-                Services.GetService<SpotifyRateLimiter>()!
+                Services.GetService<RateLimiter>()!
                 );
         }
 

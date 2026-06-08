@@ -7,11 +7,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddHttpClient<SpotifyWebApiClientTokenClient>();
-builder.Services.AddHttpClient<ISpotifyWebApiClient, SpotifyWebApiClient>();
 builder.Services.AddSingleton<SpotifyWebApiClientTokenClient>();
-builder.Services.AddSingleton<SpotifyRateLimiter>();
+
+builder.Services.AddHttpClient<ISpotifyWebApiClient, SpotifyWebApiClient>();
+builder.Services.AddSingleton<SpotifyWebApiRateLimiter>();
 builder.Services.AddScoped<ISpotifyWebApiClient, SpotifyWebApiClient>();
+
+builder.Services.AddSingleton<SpotifyWebScraperRateLimiter>();
 builder.Services.AddScoped<ISpotifyWebScraper, SpotifyWebScraperAngleSharp>();
+
 builder.Services.AddScoped<SpotifyHarvester>();
 
 
